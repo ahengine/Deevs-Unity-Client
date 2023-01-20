@@ -11,6 +11,7 @@ namespace Entities.Heeloy.Inputs
         [SerializeField] private KeyCode[] sit = { KeyCode.LeftControl , KeyCode.RightControl };
         [SerializeField] private KeyCode[] dodge = { KeyCode.LeftShift , KeyCode.RightShift };
         [SerializeField] private KeyCode swordAttack = KeyCode.Mouse0;
+        [SerializeField] private KeyCode swordHeavyAttack = KeyCode.Mouse1;
 
         private void Awake() => heeloy = GetComponent<Heeloy>();
 
@@ -37,7 +38,10 @@ namespace Entities.Heeloy.Inputs
                     heeloy.DoDodge();
 
             if (Input.GetKeyDown(swordAttack))
-                    heeloy.DoSwordAttack();
+                heeloy.DoDefaultAttack();
+
+            if (Input.GetKeyDown(swordHeavyAttack))
+                heeloy.DoSwordHeavyAttack();
         }
     }
 }
