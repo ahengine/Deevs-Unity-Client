@@ -10,18 +10,11 @@ namespace Entities.Heeloy
         private const string STAND_ANIMATOR_TRIGGER = "Stand";
         private const string WALK_ANIMATOR_INT = "Walk";
         private const string DODGE_ANIMATOR_TRIGGER = "Dodge";
-        private const string DODGE_ATTACK_ANIMATOR_TRIGGER = "DodgeAttack";
         private const string DODGE_END_ANIMATOR_TRIGGER = "DodgeEnd";
         private const string JUMP_ANIMATOR_TRIGGER = "Jump";
         private const string FALL_ANIMATOR_TRIGGER = "Fall";
         private const string ON_LAND_JUMP_ANIMATOR_TRIGGER = "OnLand";
         private const string FUCK_OFF_REACT_ANIMATOR_TRIGGER = "FuckoffReact";
-        private const string ATTACK_ANIMATOR_BOOL = "Attack";
-
-        // Forlorn WereWolf Hit
-        private const string FORLORN_HIT_DASH_STRIKE_SWORD_ANIMATOR_STATE = "ForlornHitDashStrikeSword";
-        private const string FORLORN_HIT_SWORD_01_ANIMATOR_STATE = "ForlornHitSword01";
-        private const string FORLORN_HIT_SWORD_02_ANIMATOR_STATE = "ForlornHitSword02";
 
         private JumpModule jumpModule;
         private DodgeModule dodgeModule;
@@ -30,10 +23,10 @@ namespace Entities.Heeloy
         [SerializeField] private SwordAttack swordAttack;
         [SerializeField] private SwordHeavyAttack swordHeavyAttack;
         public bool IsSit { private set; get; }
-        public bool IsAttacking { private set; get; }
+
         [SerializeField] private Transform camTarget;
         private Vector2 camPosition;
-        private bool CantAttack => IsAttacking || Dodging || cc.Velocity.y != 0;
+        protected override bool CantAttack => base.CantAttack || Dodging;
 
         protected override void Awake()
         {
@@ -48,8 +41,6 @@ namespace Entities.Heeloy
 
         private void Update()
         {
-            animator.SetInteger(WALK_ANIMATOR_INT, cc.Velocity.x > 0 ? 1 : cc.Velocity.x < 0 ? -1 : 0);
-
             if(Dodging && !dodgeModule.IsActive)
                 DodgeEnd();
         }
@@ -95,19 +86,19 @@ namespace Entities.Heeloy
         }
 
         // Attack
-        public bool DoDefaultAttack() => Dodging ? DoDodgeAttack() : cc.Velocity.y != 0 ? DoJumpAttack() : DoSwordAttack();
+        public override bool DoAttack() => Dodging ? DoDodgeAttack() : cc.Velocity.y != 0 ? DoJumpAttack() : DoSwordAttack();
         public bool DoDodgeAttack()
         {
             if (!Dodging) return false;
             Dodging = false;
-            ApplyAttack();
+            ApplyAttack(10,5,true);
             return true;
         }
         public bool DoJumpAttack()
         {
             if (Dodging || cc.Velocity.y == 0) return false;
 
-            ApplyAttack();
+            ApplyAttack(10, 5, true);
             return true;
         }
         public bool DoSwordAttack()
@@ -151,25 +142,20 @@ namespace Entities.Heeloy
         #region Apply
 
         // Attack
-        private void ApplyAttack()
-        {
-            IsAttacking = true;
-            animator.SetBool(ATTACK_ANIMATOR_BOOL, true);
-        }
         private void ApplySwordAttack()
         {
             swordAttack.Attack(animator);
-            ApplyAttack();
+            ApplyAttack(10, 5, true);
         }
         private void ApplySwordHeavyAttack()
         {
             swordHeavyAttack.Attack(animator);
-            ApplyAttack();
+            ApplyAttack(10, 5, true);
         }
         private void ApplyFuckoffReact()
         {
             animator.SetTrigger(FUCK_OFF_REACT_ANIMATOR_TRIGGER);
-            ApplyAttack();
+            ApplyAttack(10, 5, true);
         }
 
         private void ApplyStand()
@@ -222,29 +208,6 @@ namespace Entities.Heeloy
         public void StandUp()
         {
             animator.SetTrigger(STAND_ANIMATOR_TRIGGER);
-        }
-        public void AttackEnd()
-        {
-            IsAttacking = false;
-            animator.SetBool(ATTACK_ANIMATOR_BOOL, false);
-        }
-
-        public void ApplyForlornHitDashStrikeSword()
-        {
-            animator.SetTrigger(FORLORN_HIT_DASH_STRIKE_SWORD_ANIMATOR_STATE);
-            DoDamage(2);
-        }
-
-        public void ApplyForlornHitSword01()
-        {
-            animator.SetTrigger(FORLORN_HIT_SWORD_01_ANIMATOR_STATE);
-            DoDamage(2);
-        }
-
-        public void ApplyForlornHitSword02()
-        {
-            animator.SetTrigger(FORLORN_HIT_SWORD_02_ANIMATOR_STATE);
-            DoDamage(2);
         }
 
         #endregion

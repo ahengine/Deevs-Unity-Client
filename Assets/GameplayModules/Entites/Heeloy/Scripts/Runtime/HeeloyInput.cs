@@ -38,7 +38,7 @@ namespace Entities.Heeloy.Inputs
                     heeloy.DoDodge();
 
             if (Input.GetKeyDown(swordAttack))
-                heeloy.DoDefaultAttack();
+                heeloy.DoAttack();
 
             if (Input.GetKeyDown(swordHeavyAttack))
                 heeloy.DoSwordHeavyAttack();

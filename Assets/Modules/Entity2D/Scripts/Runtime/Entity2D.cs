@@ -6,6 +6,8 @@ namespace Entities
     [RequireComponent(typeof(CharacterController2D))]
     public abstract class Entity2D : MonoBehaviour, IDamagable
     {
+        protected const string WALK_ANIMATOR_INT = "Walk";
+        protected const string ATTACK_ANIMATOR_BOOL = "Attack";
         protected const string DEATH_ANIMATOR_TRIGGER = "Death";
         protected const string DEATH_INDEX_ANIMATOR_INT = "DeathIndex";
         [SerializeField] protected int deathAnimationCount = 1;
@@ -13,18 +15,43 @@ namespace Entities
         protected CharacterController2D cc;
         protected Animator animator;
         protected SpriteRenderer spr;
+        [SerializeField] protected LayerMask attackLayer;
 
         public bool IsDead { protected set; get; }
-        [field:SerializeField] public Health Health { protected set; get; }
+        public bool IsAttacking { protected set; get; }
+        protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
+        [field: SerializeField] public Health Health { protected set; get; }
 
-        public virtual void DoAddHealth(int value) => ApplyAddHealth(value);
-
-        public virtual void ApplyAddHealth(int value)
+        protected virtual void Awake()
         {
-            Health.Add(value);
+            tr = transform;
+            cc = GetComponent<CharacterController2D>();
+            if (animator = GetComponentInChildren<Animator>())
+                Health.Init();
+            spr = animator.GetComponent<SpriteRenderer>();
         }
 
+        public virtual void SetHorizontalSpeed(float value)
+        {
+            cc.SetHorizontal(value);
+            if (spr) spr.flipX = cc.FaceDirection == -1;
+            animator.SetInteger(WALK_ANIMATOR_INT, cc.Velocity.x > 0 ? 1 : cc.Velocity.x < 0 ? -1 : 0);
+        }
+
+        // Do
+        public virtual void DoPlayAnimation(string name) => animator.Play(name);
+        public virtual void DoAddHealth(int value) => ApplyAddHealth(value);
+        public virtual bool DoAttack() => !IsAttacking;
         public abstract void DoDamage(int damage);
+        public virtual void DoDeath()
+        {
+            if (IsDead) return;
+
+            ApplyDeath();
+        }
+
+        // Apply
+        public virtual void ApplyAddHealth(int value) => Health.Add(value);
         protected virtual void ApplyDamage(int damage)
         {
             if (IsDead) return;
@@ -32,16 +59,7 @@ namespace Entities
             if (Health.Current >= damage)
                 Health.ApplyDamage(damage);
             else
-            {
                 ApplyDeath();
-            }
-        }
-
-        public virtual void DoDeath()
-        {
-            if (IsDead) return;
-
-            ApplyDeath();
         }
         protected virtual void ApplyDeath()
         {
@@ -51,24 +69,24 @@ namespace Entities
             if (animator)
             {
                 animator.SetTrigger(DEATH_ANIMATOR_TRIGGER);
-                if(deathAnimationCount > 1) animator.SetInteger(DEATH_INDEX_ANIMATOR_INT, Random.Range(0, deathAnimationCount));
+                if (deathAnimationCount > 1) animator.SetInteger(DEATH_INDEX_ANIMATOR_INT, Random.Range(0, deathAnimationCount));
             }
         }
-
-        protected virtual void Awake()
+        protected virtual void ApplyAttack(float distance, int damage, bool many = true)
         {
-            tr = transform;
-            cc = GetComponent<CharacterController2D>();
-            if (animator = GetComponentInChildren<Animator>())
-            Health.Init();
-                spr = animator.GetComponent<SpriteRenderer>();
+            IsAttacking = true;
+            animator.SetBool(ATTACK_ANIMATOR_BOOL, true);
+            if (many)
+                tr.Ray2DAll<IDamagable>(distance, attackLayer).ForEach(enemy => enemy.DoDamage(damage));
+            else
+                tr.Ray2D<IDamagable>(distance, attackLayer)?.DoDamage(damage);
         }
 
-        public virtual void SetHorizontalSpeed(float value)
+        // Events
+        public virtual void AttackEnd()
         {
-            cc.SetHorizontal(value);
-
-            if(spr) spr.flipX = cc.FaceDirection == -1;
+            IsAttacking = false;
+            animator.SetBool(ATTACK_ANIMATOR_BOOL, false);
         }
     }
 }
