@@ -15,7 +15,7 @@ namespace Entities.WereWolf
 
         public override void DoDamage(int damage)
         {
-
+            
         }
     }
 }

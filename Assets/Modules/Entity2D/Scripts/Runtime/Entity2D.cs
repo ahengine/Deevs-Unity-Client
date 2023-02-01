@@ -6,7 +6,7 @@ namespace Entities
     [RequireComponent(typeof(CharacterController2D))]
     public abstract class Entity2D : MonoBehaviour, IDamagable
     {
-        protected const string WALK_ANIMATOR_INT = "Walk";
+        protected const string WALK_ANIMATOR_FLOAT = "Walk";
         protected const string ATTACK_ANIMATOR_BOOL = "Attack";
         protected const string DEATH_ANIMATOR_TRIGGER = "Death";
         protected const string DEATH_INDEX_ANIMATOR_INT = "DeathIndex";
@@ -35,7 +35,7 @@ namespace Entities
         {
             cc.SetHorizontal(value);
             if (spr) spr.flipX = cc.FaceDirection == -1;
-            animator.SetInteger(WALK_ANIMATOR_INT, cc.Velocity.x > 0 ? 1 : cc.Velocity.x < 0 ? -1 : 0);
+            animator.SetFloat(WALK_ANIMATOR_FLOAT, Mathf.Abs(cc.Velocity.x));
         }
 
         // Do
