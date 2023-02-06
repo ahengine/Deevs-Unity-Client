@@ -109,6 +109,15 @@ namespace Entities.Heeloy
             ApplySwordAttack();
             return true;
         }
+
+        public bool DoSwordAbilityAttack()
+        {
+            if (CantAttack) return false;
+
+            ApplySwordAbilityAttack();
+            return true;
+        }
+
         public bool DoSwordHeavyAttack()
         {
             if (CantAttack) return false;
@@ -145,6 +154,11 @@ namespace Entities.Heeloy
         private void ApplySwordAttack()
         {
             swordAttack.Attack(animator);
+            ApplyAttack(10, 5, true);
+        }
+        private void ApplySwordAbilityAttack()
+        {
+            swordAttack.SwordAbilityAttack(animator);
             ApplyAttack(10, 5, true);
         }
         private void ApplySwordHeavyAttack()

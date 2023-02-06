@@ -8,6 +8,7 @@ namespace Cam
         private int targetDirection = 1;
         private Vector2 lastTargetPosition;
         [SerializeField] private float distanceFollow = .25f;
+        [SerializeField] bool followVertical;
 
         protected override void UpdateData()
         {
@@ -17,14 +18,13 @@ namespace Cam
             bool AllowRightFollow = targetDirection == 1 && controller.TargetEntity.position.x > controller.Tr.position.x - distanceFollow;
             bool AllowLeftFollow = targetDirection == -1 && controller.TargetEntity.position.x < controller.Tr.position.x + distanceFollow;
 
-            if (AllowRightFollow || AllowLeftFollow)
-                Follow();
-        }
-
-        private void Follow()
-        {
             Vector3 targetPos = controller.TargetCam.position;
+            if (!followVertical) targetPos.y = controller.Tr.position.y;
             targetPos.z = controller.Tr.position.z;
+
+            if (!AllowRightFollow && !AllowLeftFollow)
+                targetPos.x = controller.Tr.position.x;
+
             controller.Tr.position = Vector3.Lerp(controller.Tr.position, targetPos, moveSpeed * Time.deltaTime);
         }
 

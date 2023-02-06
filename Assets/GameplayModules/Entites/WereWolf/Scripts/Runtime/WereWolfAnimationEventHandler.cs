@@ -10,5 +10,7 @@ namespace Entities.WereWolf
         {
             owner = transform.parent.parent.GetComponent<WereWolf>();
         }
+
+        public void AttackEnd() => owner.AttackEnd();
     }
 }

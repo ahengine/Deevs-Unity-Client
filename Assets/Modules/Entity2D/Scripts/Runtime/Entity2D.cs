@@ -63,6 +63,7 @@ namespace Entities
         }
         protected virtual void ApplyDeath()
         {
+            IsDead = true;
             cc.SetAllowAction(false);
             Health.ApplyDeath();
 

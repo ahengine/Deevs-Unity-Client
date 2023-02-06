@@ -16,7 +16,7 @@ namespace Cam
         {
             base.Apply();
             active = true;
-            origin = controller.Cam.transform.position;
+            origin = controller.Cam.transform.localPosition;
             startTime = Time.time;
         }
 
@@ -29,10 +29,13 @@ namespace Cam
 
             if (!active) return;
 
-            controller.Cam.transform.position = origin + Random.onUnitSphere * intensity;
-            
-            if(startTime + duration < Time.time)
+            controller.Cam.transform.localPosition = origin + Random.onUnitSphere * intensity * Time.deltaTime;
+
+            if (startTime + duration < Time.time)
+            {
+                controller.Cam.transform.localPosition = origin;
                 active = false;
+            }
         }
     }
 }

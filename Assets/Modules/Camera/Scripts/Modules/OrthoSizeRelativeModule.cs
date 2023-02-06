@@ -4,17 +4,22 @@ namespace Cam
 {
     public class OrthoSizeRelativeModule : CameraModule
     {
+        private const float onTenthOrthoSize = 1.78f;
+        [SerializeField] private Transform YSyncTr;
         [SerializeField] private Transform relative;
-        [SerializeField] private float maxDistanceSize = 1.5f;
         [SerializeField] private Vector2 yRange = new Vector2(-2, 4);
         [SerializeField] private Vector2 orthoSize = new Vector2(8, 13);
         private Vector3 position;
-
+        public float OrthSizeFillAmount => (controller.Cam.orthographicSize - orthoSize.x) / orthoSize.y;
+        public float distanceCameraCamTargetOrthoSize;
 
         public override void Init(CameraController controller)
         {
             base.Init(controller);
-            position = controller.Tr.localPosition;
+            position = YSyncTr.localPosition;
+
+            distanceCameraCamTargetOrthoSize =
+                DistanceFloat(controller.TargetCam.position.x, controller.TargetEntity.position.x) / onTenthOrthoSize;
         }
 
         public void SetRelativeTo(Transform relativeTo)
@@ -26,12 +31,16 @@ namespace Cam
         {
             base.UpdateData();
 
-            if(!controller.TargetEntity) return;
+            if (!controller.TargetEntity) return;
 
-            float distance = Mathf.Clamp(Vector2.Distance(controller.TargetEntity.position, relative.position) / maxDistanceSize, 0, 1);
-            position.y = yRange.x + (yRange.y - yRange.x) * distance;
-            controller.Cam.transform.localPosition = position;
-            controller.Cam.orthographicSize = orthoSize.x + (orthoSize.y - orthoSize.x) * distance;
+            float ortho = distanceCameraCamTargetOrthoSize + DistanceFloat(relative.position.x, 
+                controller.TargetEntity.position.x) / onTenthOrthoSize;
+            controller.Cam.orthographicSize = Mathf.Clamp(ortho, orthoSize.x, orthoSize.y);
+            position.y = yRange.x + (yRange.y - yRange.x) * OrthSizeFillAmount;
+            YSyncTr.localPosition = position;
         }
+
+        private static float DistanceFloat(float a, float b) =>
+            Mathf.Abs(Mathf.Abs(a) - Mathf.Abs(b));
     }
 }

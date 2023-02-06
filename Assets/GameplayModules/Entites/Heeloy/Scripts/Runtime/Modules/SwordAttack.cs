@@ -5,6 +5,7 @@ namespace Entities.Heeloy.Moudles
     [System.Serializable]
     public class SwordAttack
     {
+        private const string SWORD_ABILITY_ATTACK_ANIMATOR_TRIGGER = "SwordAbilityAttack";
         private const string SWORD_ATTACK_ANIMATOR_TRIGGER = "SwordAttack";
         private const string SWORD_ATTACK_INDEX_ANIMATOR_INT = "SwordAttackIndex";
 
@@ -27,6 +28,11 @@ namespace Entities.Heeloy.Moudles
         {
             animator.SetTrigger(SWORD_ATTACK_ANIMATOR_TRIGGER);
             animator.SetInteger(SWORD_ATTACK_INDEX_ANIMATOR_INT, Index);
+        }
+
+        public void SwordAbilityAttack(Animator animator)
+        {
+            animator.SetTrigger(SWORD_ABILITY_ATTACK_ANIMATOR_TRIGGER);
         }
     }
 }
