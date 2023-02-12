@@ -1,10 +1,5 @@
 using UnityEngine;
-using CC2D;
-using CC2D.Modules;
-using Entities.WereWolf.HeadGiant;
 using Entities.WereWolf.Moudles;
-
-//using Entities.WereWolf.Moudles;
 
 namespace Entities.WereWolf
 {
@@ -16,8 +11,6 @@ namespace Entities.WereWolf
         private const string STRIKE_TRIGGER_ANIMATOR = "Strike";
         private const string STRIKE_FIRST_TRIGGER_ANIMATOR = "StrikeFirst";
         private const string FINISHER_DEATH_ANIMATOR_TRIGGER = "FinisherDeath";
-
-        private bool attack;
 
         [field:SerializeField] public WereWolfGiantHeadModule GiantHeadModule { private set; get; }
         private bool firstStrike;
@@ -42,20 +35,20 @@ namespace Entities.WereWolf
         // Do
         public void DoCries()
         {
-            if (attack) return;
+            if (IsAttacking) return;
 
             ApplyCries();
         }
 
         public void DoDashStrike()
         {
-            if (attack) return;
+            if (IsAttacking) return;
 
             ApplyDashStrike();
         }
         public void DoStrike()
         {
-            if (attack) return;
+            if (IsAttacking) return;
 
             ApplyStrike();
         }
@@ -69,18 +62,18 @@ namespace Entities.WereWolf
         // Apply
         private void ApplyCries()
         {
-            ApplyAttack();
+            ApplyAttack(2, 5);
             animator.SetTrigger(CRIES_TRIGGER_ANIMATOR);
         }
 
         private void ApplyDashStrike()
         {
-            ApplyAttack();
+            ApplyAttack(2, 5);
             animator.SetTrigger(DASH_STRIKE_TRIGGER_ANIMATOR);
         }
         private void ApplyStrike()
         {
-            ApplyAttack();
+            ApplyAttack(2,5);
 
             if (!firstStrike)
             {
@@ -89,17 +82,6 @@ namespace Entities.WereWolf
             }
             else
                 animator.SetTrigger(STRIKE_TRIGGER_ANIMATOR);
-        }
-
-        private void ApplyAttack()
-        {
-            attack = true;
-            animator.SetTrigger(ATTACK_TRIGGER_ANIMATOR);
-        }
-
-        public void AttackEnd()
-        {
-            attack = false;
         }
     }
 }

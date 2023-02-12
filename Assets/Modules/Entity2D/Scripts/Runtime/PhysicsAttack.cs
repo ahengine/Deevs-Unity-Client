@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Entities
 {
-    public static class PhysicsAttack
+    public static class RayAttack
     {
         public static T Ray2D<T>(this Transform tr, float distance, LayerMask layerMask = default) where T : class
         {
@@ -11,7 +11,6 @@ namespace Entities
 
             return hit && hit is T && hit.transform != tr ? hit as T : null;
         }
-
         public static List<T> Ray2DAll<T>(this Transform tr, float distance, LayerMask layerMask = default) where T : class
         {
             List<T> list = new List<T>();
@@ -23,14 +22,16 @@ namespace Entities
 
             return list;
         }
+    }
 
+    public static class CircleAttack
+    {
         public static T Circle2D<T>(this Transform tr, float raidus, LayerMask layerMask = default) where T : class
         {
-            var hit = Physics2D.CircleCast(tr.position, raidus,tr.right, layerMask);
+            var hit = Physics2D.CircleCast(tr.position, raidus, tr.right, layerMask);
 
             return hit && hit is T && hit.transform != tr ? hit as T : null;
         }
-
         public static List<T> Circle2DAll<T>(this Transform tr, float raidus, LayerMask layerMask = default) where T : class
         {
             List<T> list = new List<T>();
