@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using IEnumerator = System.Collections.IEnumerator;
 
-public class CoroutineHelper : MonoBehaviour
+public static class CoroutineHelper 
 {
-    // Start is called before the first frame update
-    void Start()
+    public static IEnumerator CallAction(Action action, float delayCallAction, bool isTimeScaled = true)
     {
-        
+        if (isTimeScaled)
+            yield return new WaitForSeconds(delayCallAction);
+        else
+            yield return new WaitForSecondsRealtime(delayCallAction);
+
+        if (action == null)
+            action.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public delegate bool BoolFunc();
+
+    public static IEnumerator WaitToCallAction(Action action, BoolFunc waitingForThis)
     {
-        
+        while(waitingForThis())
+            yield return new WaitForEndOfFrame();
+
+        if (action == null)
+            action.Invoke();
     }
 }

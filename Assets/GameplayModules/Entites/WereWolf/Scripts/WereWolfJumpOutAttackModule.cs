@@ -13,8 +13,7 @@ namespace Entities.WereWolf.Moudles
 
         private WereWolf controller;
         private Animator animator;
-        [SerializeField] private Transform groundDamaged;
-        [SerializeField] private float groundDamagedDistance = .3f;
+        [SerializeField] private float damagDistance = .3f;
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10,20);
         [SerializeField] private Animator seekingAnimator;
         [SerializeField] private Transform dropTargetPoint;
@@ -48,15 +47,14 @@ namespace Entities.WereWolf.Moudles
         public void JumpOut()
         {
             controller.transform.position = new Vector3(controller.Target.position.x, controller.transform.position.y);
-            groundDamaged.position = new Vector3(controller.Target.position.x, groundDamaged.position.y);
-            groundDamaged.gameObject.SetActive(true);
+            controller.CreateGroundDamaged();
             animator.SetTrigger(JUMPOUT_TRIGGER_ANIMATION);
         }
 
         public void Attack()
         {
             bool successAttack =
-                FloatHelper.Distance(controller.Target.position.x, groundDamaged.position.x) < groundDamagedDistance;
+                FloatHelper.Distance(controller.Target.position.x, controller.transform.position.x) < damagDistance;
             animator.SetBool(JUMPOOUT_ATTACK_SUCCESS_BOOL_ANIMATION, successAttack);
 
             if (successAttack)
@@ -76,8 +74,6 @@ namespace Entities.WereWolf.Moudles
                 controller.Target.position = dropTargetPoint.position;
                 controller.Target.gameObject.SetActive(true);
             }
-
-            groundDamaged.gameObject.SetActive(false);
         }
     }
 }

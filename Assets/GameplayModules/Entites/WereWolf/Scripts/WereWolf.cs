@@ -18,6 +18,8 @@ namespace Entities.WereWolf
 
         private bool deathIsCompleted;
         [SerializeField] private Transform finisherDeathDropTargetPoint;
+        [SerializeField] private GameObject groundDamagedPrefab;
+        [SerializeField] private float groundDamagedY;
 
         protected override void Awake()
         {
@@ -109,5 +111,8 @@ namespace Entities.WereWolf
 
         public void SetTarget(Transform target) =>
             Target = target;
+
+        public void CreateGroundDamaged() =>
+            Instantiate(groundDamagedPrefab, new Vector3(tr.position.x, groundDamagedY),Quaternion.identity);
     }
 }

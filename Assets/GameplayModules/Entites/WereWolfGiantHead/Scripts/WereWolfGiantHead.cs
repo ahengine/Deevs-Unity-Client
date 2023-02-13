@@ -20,7 +20,7 @@ namespace Entities.WereWolf.HeadGiant
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
         private Animator animator;
         private SpriteRenderer sr;
-        private Vector2 attackTargetFocused;
+        public Vector2 AttackTargetFocused { private set; get; }
         private WereWolfGiantHeadModule owner;
         private bool lastAttackState;
 
@@ -44,20 +44,19 @@ namespace Entities.WereWolf.HeadGiant
 
         public void DoAttack()
         {
-            attackTargetFocused = AttackTarget.position;
             animator.SetTrigger(PREPARING_TRIGGER);
-            Invoke("ApplyAttack", delayAttack);
+            StartCoroutine(CoroutineHelper.CallAction(ApplyAttack, delayAttack));
         }
 
         private void ApplyAttack()
         {
-            attackTargetFocused = AttackTarget.position;
+            AttackTargetFocused = AttackTarget.position;
             animator.SetTrigger(ATTACK_TRIGGER);
         }
 
         public void Attack()
         {
-            animator.SetTrigger(FloatHelper.Distance(AttackTarget.position.x, attackTargetFocused.x) < attackDistance ?
+            animator.SetTrigger(FloatHelper.Distance(AttackTarget.position.x, AttackTargetFocused.x) < attackDistance ?
                 ATTACK_SUCCESS_TRIGGER : ATTACK_FAILED_TRIGGER);
 
             lastAttackState = false;
