@@ -1,7 +1,5 @@
-using IEnumerator = System.Collections.IEnumerator;
 using UnityEngine;
 using Entities.WereWolf.HeadGiant;
-
 
 namespace Entities.WereWolf.Moudles
 {
@@ -15,6 +13,9 @@ namespace Entities.WereWolf.Moudles
         private const string HEAD_OUT_SHUT_TRIGGER_ANIMATOR = "HeadOutShut";
 
         [SerializeField] private WereWolfGiantHead giantHead;
+        [SerializeField] private float distanceHoriozntalAttack = 1;
+        [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
+
         public bool HeadInGround { private set; get; }
         private Animator animator;
 
@@ -22,31 +23,30 @@ namespace Entities.WereWolf.Moudles
         {
             this.controller = controller;
             this.animator = animator;
+            giantHead.SetOwner(this);
         }
 
-        public bool DoAttack(int count)
+        public bool DoAttack()
         {
             if (HeadInGround) return true;
 
-            controller.StartCoroutine(ApplyAttackAnimation(count));
-
+            HeadInGround = true;
+            animator.SetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
+            giantHead.DoAttack();
             return false;
         }
 
-        private IEnumerator ApplyAttackAnimation(int count)
+        public void EndAttack(bool success)
         {
-            HeadInGround = true;
-            animator.SetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
-            yield return new WaitForSeconds(2.0f);
-            int counter = count;
-            while (counter > 0)
-            {
-                giantHead.DoWaitingAttack();
-                yield return new WaitForSeconds(4.0f);
-                counter--;
-            }
-            animator.SetTrigger(Random.value > .5 ? HEAD_OUT_TRIGGER_ANIMATOR: HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
+            animator.SetTrigger(success ? HEAD_OUT_TRIGGER_ANIMATOR : HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
             HeadInGround = false;
+        }
+
+        public void Attack()
+        {
+            if (FloatHelper.TargetIsFrontOfSelf(controller.FaceDirection, controller.transform.position.x, giantHead.AttackTarget.position.x) && 
+                FloatHelper.Distance(controller.transform.position.x, giantHead.AttackTarget.position.x) < distanceHoriozntalAttack)
+                giantHead.AttackTarget.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x, damageRange.y));
         }
     }
 }

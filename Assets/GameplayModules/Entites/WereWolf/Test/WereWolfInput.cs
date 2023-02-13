@@ -17,7 +17,7 @@ namespace Entities.WereWolf.Inputs
             owner.SetHorizontalSpeed(Input.GetAxis(horizontalMove));
 
             if (Input.GetKeyDown(HeadInAttack))
-                owner.GiantHeadModule.DoAttack(2);
+                owner.GiantHeadModule.DoAttack();
 
             if (Input.GetKeyDown(Death))
             {

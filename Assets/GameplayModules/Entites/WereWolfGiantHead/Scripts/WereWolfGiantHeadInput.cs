@@ -15,12 +15,6 @@ namespace Entities.WereWolf.HeadGiant.Inputs
         {
             if(Input.GetKeyDown(KeyCode.Alpha9))
                 controller.DoAttack();
-
-            if (Input.GetKeyDown(KeyCode.Alpha8))
-                controller.DoAttack();
-
-            if (Input.GetKeyDown(KeyCode.Alpha7))
-                controller.DoWaitingAttack();
         }
     }
 }

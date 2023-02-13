@@ -16,6 +16,7 @@ namespace Entities
         protected Animator animator;
         protected SpriteRenderer spr;
         [SerializeField] protected LayerMask attackLayer;
+        public int FaceDirection => cc.FaceDirection;
 
         public bool IsDead { protected set; get; }
         public bool IsAttacking { protected set; get; }
@@ -42,7 +43,7 @@ namespace Entities
         public virtual void DoPlayAnimation(string name) => animator.Play(name);
         public virtual void DoAddHealth(int value) => ApplyAddHealth(value);
         public virtual bool DoAttack() => !IsAttacking;
-        public abstract void DoDamage(int damage);
+        public virtual void DoDamage(int damage) => Health.ApplyDamage(damage);
         public virtual void DoDeath()
         {
             if (IsDead) return;

@@ -5,7 +5,6 @@ namespace Entities.WereWolf
 {
     public class WereWolf : Entity2D
     {
-        private const string ATTACK_TRIGGER_ANIMATOR = "Attack";
         private const string CRIES_TRIGGER_ANIMATOR = "Cries";
         private const string DASH_STRIKE_TRIGGER_ANIMATOR = "DashStrike";
         private const string STRIKE_TRIGGER_ANIMATOR = "Strike";
@@ -13,7 +12,7 @@ namespace Entities.WereWolf
         private const string FINISHER_DEATH_ANIMATOR_TRIGGER = "FinisherDeath";
 
         [field:SerializeField] public WereWolfGiantHeadModule GiantHeadModule { private set; get; }
-        private bool firstStrike;
+        [field:SerializeField] private bool firstStrike;
 
         protected override void Awake()
         {
@@ -83,5 +82,8 @@ namespace Entities.WereWolf
             else
                 animator.SetTrigger(STRIKE_TRIGGER_ANIMATOR);
         }
+
+        public void ApplyHeadOutAttack() =>
+            GiantHeadModule.Attack();
     }
 }

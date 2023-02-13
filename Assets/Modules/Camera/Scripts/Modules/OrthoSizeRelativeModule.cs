@@ -19,7 +19,7 @@ namespace Cam
             position = YSyncTr.localPosition;
 
             distanceCameraCamTargetOrthoSize =
-                DistanceFloat(controller.TargetCam.position.x, controller.TargetEntity.position.x) / onTenthOrthoSize;
+                FloatHelper.Distance(controller.TargetCam.position.x, controller.TargetEntity.position.x) / onTenthOrthoSize;
         }
 
         public void SetRelativeTo(Transform relativeTo)
@@ -33,14 +33,11 @@ namespace Cam
 
             if (!controller.TargetEntity) return;
 
-            float ortho = distanceCameraCamTargetOrthoSize + DistanceFloat(relative.position.x, 
+            float ortho = distanceCameraCamTargetOrthoSize + FloatHelper.Distance(relative.position.x, 
                 controller.TargetEntity.position.x) / onTenthOrthoSize;
             controller.Cam.orthographicSize = Mathf.Clamp(ortho, orthoSize.x, orthoSize.y);
             position.y = yRange.x + (yRange.y - yRange.x) * OrthSizeFillAmount;
             YSyncTr.localPosition = position;
         }
-
-        private static float DistanceFloat(float a, float b) =>
-            Mathf.Abs(Mathf.Abs(a) - Mathf.Abs(b));
     }
 }

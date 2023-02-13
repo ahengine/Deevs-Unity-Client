@@ -37,6 +37,7 @@ namespace Entities.Heeloy
             jumpModule.OnFall += OnFall;
             jumpModule.OnGround += OnGround;
             camPosition = camTarget.localPosition;
+            Health.OnDeath += ApplyDeath;
         }
 
         private void Update()
@@ -140,7 +141,7 @@ namespace Entities.Heeloy
         }
 
         // Health
-        public override void DoDamage(int damage) { }
+        public override void DoDamage(int damage) { Health.ApplyDamage(damage); print("damage: " + damage); }
         public override void DoDeath()
         {
             

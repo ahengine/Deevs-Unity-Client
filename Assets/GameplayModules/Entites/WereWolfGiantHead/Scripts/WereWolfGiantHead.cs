@@ -1,3 +1,4 @@
+using Entities.WereWolf.Moudles;
 using UnityEngine;
 
 namespace Entities.WereWolf.HeadGiant
@@ -6,13 +7,20 @@ namespace Entities.WereWolf.HeadGiant
     {
         private const string ATTACK_SUCCESS_TRIGGER = "AttackSuccess";
         private const string ATTACK_FAILED_TRIGGER = "AttackFailed";
-        private const string PREPARING_TRIGGER = "Preparing";
+        private const string ATTACK_TRIGGER = "Attack";
 
         private Transform tr;
         private Vector2 position;
         [SerializeField] private Transform target;
+        [field:SerializeField] public Transform AttackTarget { private set; get; }
+        [SerializeField] private Transform leftTargetPoint;
+        [SerializeField] private float attackDistance = 2;
+        [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
         private Animator animator;
         private SpriteRenderer sr;
+        private Vector2 attackTargetFocused;
+        private WereWolfGiantHeadModule owner;
+        private bool lastAttackState;
 
         private void Awake()
         {
@@ -29,28 +37,38 @@ namespace Entities.WereWolf.HeadGiant
                 tr.position = position;
         }
 
-        public void DoWaitingAttack()
-        {
-            if(applyWaitingAttackAnimationCoroutine != null)
-                StopCoroutine(applyWaitingAttackAnimationCoroutine);
+        public void SetOwner(WereWolfGiantHeadModule owner) => 
+            this.owner = owner;
 
-            applyWaitingAttackAnimationCoroutine = StartCoroutine(ApplyWaitingAttackAnimation());
+        public void DoAttack()
+        {
+            attackTargetFocused = AttackTarget.position;
+            animator.SetTrigger(ATTACK_TRIGGER);
         }
 
-        private Coroutine applyWaitingAttackAnimationCoroutine;
-        private System.Collections.IEnumerator ApplyWaitingAttackAnimation()
+        public void Attack()
         {
-            DoPreparing();
-            yield return new WaitForSeconds(2.0f);
-            DoAttack();
-            yield return new WaitForSeconds(2.0f);
-            applyWaitingAttackAnimationCoroutine = null;
+            animator.SetTrigger(FloatHelper.Distance(AttackTarget.position.x, attackTargetFocused.x) < attackDistance ?
+                ATTACK_SUCCESS_TRIGGER : ATTACK_FAILED_TRIGGER);
+
+            lastAttackState = false;
         }
 
-        public void DoAttack() =>
-            animator.SetTrigger(Random.value > .5 ? ATTACK_SUCCESS_TRIGGER : ATTACK_FAILED_TRIGGER);
+        public void PickUpTarget() =>
+            AttackTarget.gameObject.SetActive(false);
 
-        public void DoPreparing() =>
-            animator.SetTrigger(PREPARING_TRIGGER);
+        public void LeftTarget()
+        {
+            AttackTarget.position = leftTargetPoint.position;
+            AttackTarget.gameObject.SetActive(true);
+            AttackTarget.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x,damageRange.y));
+            lastAttackState = true;
+            EndAttack();
+        }
+
+        public void EndAttack()
+        {
+            owner?.EndAttack(lastAttackState);
+        }
     }
 }

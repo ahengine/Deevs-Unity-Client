@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 809685792}
   - component: {fileID: 809685791}
   m_Layer: 0
-  m_Name: FW_jumpout-attack-fail-15-(ground-object)
+  m_Name: JumpOutAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -768,7 +768,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809685790}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08145808, y: -0.328, z: 0}
+  m_LocalPosition: {x: 0.08145808, y: -0.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1315,7 +1315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3747763471990657608, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
       propertyPath: <GiantHeadModule>k__BackingField.giantHead
@@ -1374,6 +1374,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2577400000347048080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5631705343081986080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.9
@@ -1384,7 +1388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5631705343294772634, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.518
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5631705343294772634, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1428,10 +1432,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5631705343294772637, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
+--- !u!4 &5631705342793985303 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2577400000347048080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
+  m_PrefabInstance: {fileID: 5631705342793985302}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8745684149868955045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1439,8 +1448,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5436842522512049542, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: target
+      value: 
+      objectReference: {fileID: 5631705342793985303}
+    - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
+      propertyPath: attackTarget
       value: 
       objectReference: {fileID: 1963624760}
     - target: {fileID: 8745684149232181726, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
@@ -1449,7 +1466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8745684149232181726, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 8745684149232181726, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: m_LocalPosition.y
