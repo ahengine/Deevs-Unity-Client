@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entities.WereWolf.HeadGiant;
+using IEnumerator = System.Collections.IEnumerator;
 
 namespace Entities.WereWolf.Moudles
 {
@@ -15,6 +16,7 @@ namespace Entities.WereWolf.Moudles
         [SerializeField] private WereWolfGiantHead giantHead;
         [SerializeField] private float distanceHoriozntalAttack = 1;
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
+        [SerializeField] private float delayGiantAttack = 1.5f;
 
         public bool HeadInGround { private set; get; }
         private Animator animator;
@@ -28,13 +30,23 @@ namespace Entities.WereWolf.Moudles
 
         public bool DoAttack()
         {
-            if (HeadInGround || !controller.DoAttack()) return true;
+            if (HeadInGround || !controller.DoAttack()) return false;
+
+            animator.ResetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
+            animator.ResetTrigger(HEAD_OUT_TRIGGER_ANIMATOR);
+            animator.ResetTrigger(HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
 
             HeadInGround = true;
             animator.SetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
             controller.ApplyAttack();
+            controller.StartCoroutine(GiantHeadDelay());
+            return true;
+        }
+
+        private IEnumerator GiantHeadDelay()
+        {
+            yield return new WaitForSeconds(delayGiantAttack);
             giantHead.DoAttack();
-            return false;
         }
 
         public void EndAttack(bool success)

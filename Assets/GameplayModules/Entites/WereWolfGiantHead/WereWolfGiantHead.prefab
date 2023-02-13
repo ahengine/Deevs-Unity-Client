@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  attackTarget: {fileID: 7375521005330427719}
+  <AttackTarget>k__BackingField: {fileID: 0}
   leftTargetPoint: {fileID: 6289177797499309041}
   attackDistance: 0.15
   damageRange: {x: 10, y: 20}

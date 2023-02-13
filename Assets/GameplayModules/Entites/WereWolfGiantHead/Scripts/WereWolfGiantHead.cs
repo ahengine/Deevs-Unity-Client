@@ -7,6 +7,7 @@ namespace Entities.WereWolf.HeadGiant
     {
         private const string ATTACK_SUCCESS_TRIGGER = "AttackSuccess";
         private const string ATTACK_FAILED_TRIGGER = "AttackFailed";
+        private const string PREPARING_TRIGGER = "Preparing";
         private const string ATTACK_TRIGGER = "Attack";
 
         private Transform tr;
@@ -15,6 +16,7 @@ namespace Entities.WereWolf.HeadGiant
         [field:SerializeField] public Transform AttackTarget { private set; get; }
         [SerializeField] private Transform leftTargetPoint;
         [SerializeField] private float attackDistance = 2;
+        [SerializeField] private float delayAttack = 2;
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
         private Animator animator;
         private SpriteRenderer sr;
@@ -41,6 +43,13 @@ namespace Entities.WereWolf.HeadGiant
             this.owner = owner;
 
         public void DoAttack()
+        {
+            attackTargetFocused = AttackTarget.position;
+            animator.SetTrigger(PREPARING_TRIGGER);
+            Invoke("ApplyAttack", delayAttack);
+        }
+
+        private void ApplyAttack()
         {
             attackTargetFocused = AttackTarget.position;
             animator.SetTrigger(ATTACK_TRIGGER);

@@ -172,29 +172,8 @@ MonoBehaviour:
   YSyncTr: {fileID: 1444308295}
   relative: {fileID: 90616045}
   yRange: {x: 0, y: 0.8}
-  orthoSize: {x: 0.6, y: 1.4}
+  orthoSize: {x: 0.6, y: 0.8}
   distanceCameraCamTargetOrthoSize: 0
---- !u!1 &90616034 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3747763471990657608, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-  m_PrefabInstance: {fileID: 3747763472077071018}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &90616040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90616034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f72e76a3ae8c075418f8b31256d28182, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  horizontalMove: Horizontal
-  Death: 53
-  HeadInAttack: 54
-  JumpInOutAttack: 55
 --- !u!4 &90616045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3747763471990657613, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
@@ -229,10 +208,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5be418a8bf81f44a331928a47d5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <TargetEntity>k__BackingField: {fileID: 90616045}
-  <TargetCam>k__BackingField: {fileID: 483357224}
+  <TargetEntity>k__BackingField: {fileID: 1963624760}
+  <TargetCam>k__BackingField: {fileID: 494314271}
   modules:
   - {fileID: 482102101}
+  - {fileID: 52091026}
+  - {fileID: 686838911}
+  - {fileID: 698133027}
 --- !u!4 &98577433
 Transform:
   m_ObjectHideFlags: 0
@@ -241,7 +223,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98577431}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.35, z: -10}
+  m_LocalPosition: {x: 0, y: -0.6, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -250,6 +232,7 @@ Transform:
   - {fileID: 52091025}
   - {fileID: 686838910}
   - {fileID: 698133028}
+  - {fileID: 1335339930}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -302,10 +285,10 @@ MonoBehaviour:
   moveSpeed: 5
   distanceFollow: 0.5
   followVertical: 0
---- !u!4 &483357224 stripped
+--- !u!4 &494314271 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 3747763471932006702, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-  m_PrefabInstance: {fileID: 3747763472077071018}
+  m_CorrespondingSourceObject: {fileID: 5631705343081986080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
+  m_PrefabInstance: {fileID: 5631705342793985302}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
@@ -414,8 +397,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1335339930}
+  m_Children: []
   m_Father: {fileID: 1444308295}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1052,12 +1034,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1335339927}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.67, y: -0.099999994, z: 10}
+  m_LocalPosition: {x: 0.645, y: 0.17, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 519420032}
-  m_RootOrder: 0
+  m_Father: {fileID: 98577433}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1417202723
 GameObject:
@@ -1448,21 +1430,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3747763470735837498, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
+    - target: {fileID: 90616040, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3747763471990657608, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
       propertyPath: m_Name
       value: WereWolf
-      objectReference: {fileID: 0}
-    - target: {fileID: 3747763471990657608, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-      propertyPath: attackLayer.m_Bits
-      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
       propertyPath: <Target>k__BackingField
@@ -1472,14 +1446,6 @@ PrefabInstance:
       propertyPath: <GiantHeadModule>k__BackingField.giantHead
       value: 
       objectReference: {fileID: 1712039036}
-    - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-      propertyPath: <JumpOutAttackModule>k__BackingField.seekDelay
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
-      propertyPath: <JumpOutAttackModule>k__BackingField.jumpOutDelay
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 3747763471990657609, guid: da260f374bda1d14a98cf6d7782141c3, type: 3}
       propertyPath: <JumpOutAttackModule>k__BackingField.groundDamaged
       value: 
@@ -1541,14 +1507,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2577400000347048080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5631705343081986080, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.9
-      objectReference: {fileID: 0}
     - target: {fileID: 5631705343294772634, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1597,10 +1555,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Heeloy-Player
       objectReference: {fileID: 0}
-    - target: {fileID: 5631705343294772637, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93cbfbb307948074c910410682c7ec2f, type: 3}
 --- !u!4 &5631705342793985303 stripped
@@ -1615,18 +1569,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5436842522512049542, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 5631705342793985303}
-    - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
-      propertyPath: attackTarget
-      value: 
-      objectReference: {fileID: 1963624760}
     - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: <AttackTarget>k__BackingField
       value: 

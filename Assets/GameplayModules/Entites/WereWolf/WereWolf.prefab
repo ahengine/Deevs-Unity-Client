@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 3747763471990657615}
   - component: {fileID: 3747763471990657614}
   - component: {fileID: 3747763471990657609}
+  - component: {fileID: 90616040}
   m_Layer: 0
   m_Name: WereWolf
   m_TagString: Untagged
@@ -350,7 +351,7 @@ MonoBehaviour:
   deathAnimationCount: 1
   attackLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   <Health>k__BackingField:
     <Default>k__BackingField: 100
     <Max>k__BackingField: 100
@@ -365,10 +366,26 @@ MonoBehaviour:
     damageRange: {x: 10, y: 20}
     seekingAnimator: {fileID: 0}
     dropTargetPoint: {fileID: 9012751724807184593}
-    seekDelay: 1.2
-    jumpOutDelay: 1.2
+    seekDelay: 3
+    jumpOutDelay: 3
   firstStrike: 0
   finisherDeathDropTargetPoint: {fileID: 7925849423493052317}
+--- !u!114 &90616040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747763471990657608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f72e76a3ae8c075418f8b31256d28182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalMove: Horizontal
+  Death: 53
+  HeadInAttack: 54
+  JumpInOutAttack: 55
 --- !u!1 &5371740258382545293
 GameObject:
   m_ObjectHideFlags: 0
