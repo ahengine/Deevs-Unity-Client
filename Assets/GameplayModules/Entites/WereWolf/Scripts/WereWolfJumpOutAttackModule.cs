@@ -24,7 +24,6 @@ namespace Entities.WereWolf.Moudles
         {
             this.controller = controller;
             this.animator = animator;
-            groundDamaged.gameObject.SetActive(false);
         }
 
         public void DoAttack() => JumpIn();
