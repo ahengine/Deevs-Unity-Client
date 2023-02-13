@@ -68,7 +68,7 @@ namespace Entities.WereWolf.HeadGiant
 
         public void EndAttack()
         {
-            owner?.EndAttack(lastAttackState);
+            owner.EndAttack(lastAttackState);
         }
     }
 }

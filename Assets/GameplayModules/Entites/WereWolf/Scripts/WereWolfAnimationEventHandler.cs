@@ -15,6 +15,15 @@ namespace Entities.WereWolf
             owner.AttackEnd();
 
         public void ApplyHeadOutAttack() =>
-            owner.ApplyHeadOutAttack();
+            owner.GiantHeadModule.Attack();
+
+        public void ApplyJumpOutAttack() =>
+            owner.JumpOutAttackModule.Attack();
+
+        public void ApplyJumpOutAttackEnd() =>
+                owner.JumpOutAttackModule.AttackEnd();
+
+        public void DeathComplete() =>
+            owner.ApplyFinisherDeathEnd();
     }
 }

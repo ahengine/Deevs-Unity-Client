@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1297917585080039445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7925849423493052317}
+  m_Layer: 0
+  m_Name: TargetFinisherPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7925849423493052317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297917585080039445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3747763471990657613}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3747763470472598648
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,6 +278,8 @@ Transform:
   m_Children:
   - {fileID: 3747763471213845982}
   - {fileID: 3747763471932006702}
+  - {fileID: 9012751724807184593}
+  - {fileID: 7925849423493052317}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -314,3 +347,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993b5fe2f65d7004988242981b48f3d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathAnimationCount: 1
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  <Health>k__BackingField:
+    <Default>k__BackingField: 100
+    <Max>k__BackingField: 100
+  <Target>k__BackingField: {fileID: 0}
+  <GiantHeadModule>k__BackingField:
+    giantHead: {fileID: 0}
+    distanceHoriozntalAttack: 1
+    damageRange: {x: 10, y: 20}
+  <JumpOutAttackModule>k__BackingField:
+    groundDamaged: {fileID: 0}
+    groundDamagedDistance: 0.3
+    damageRange: {x: 10, y: 20}
+    seekingAnimator: {fileID: 0}
+    dropTargetPoint: {fileID: 9012751724807184593}
+    seekDelay: 1.2
+    jumpOutDelay: 1.2
+  firstStrike: 0
+  finisherDeathDropTargetPoint: {fileID: 7925849423493052317}
+--- !u!1 &5371740258382545293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9012751724807184593}
+  m_Layer: 0
+  m_Name: DropTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9012751724807184593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5371740258382545293}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.171, y: 0.892, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3747763471990657613}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

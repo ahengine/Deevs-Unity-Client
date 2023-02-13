@@ -11,13 +11,19 @@ namespace Entities.WereWolf
         private const string STRIKE_FIRST_TRIGGER_ANIMATOR = "StrikeFirst";
         private const string FINISHER_DEATH_ANIMATOR_TRIGGER = "FinisherDeath";
 
+        [field:SerializeField] public Transform Target { private set; get; }
         [field:SerializeField] public WereWolfGiantHeadModule GiantHeadModule { private set; get; }
+        [field:SerializeField] public WereWolfJumpOutAttackModule JumpOutAttackModule { private set; get; }
         [field:SerializeField] private bool firstStrike;
+
+        private bool deathIsCompleted;
+        [SerializeField] private Transform finisherDeathDropTargetPoint;
 
         protected override void Awake()
         {
             base.Awake();
             GiantHeadModule.Init(this,animator);
+            JumpOutAttackModule.Init(this,animator);
         }
 
         public override void SetHorizontalSpeed(float value)
@@ -28,10 +34,16 @@ namespace Entities.WereWolf
 
         public override void DoDamage(int damage)
         {
-            
+            base.DoDamage(damage);
         }
 
         // Do
+        public void DoFinisherDeath()
+        {
+            if (deathIsCompleted) return;
+
+            ApplyFinisherDeath();
+        }
         public void DoCries()
         {
             if (IsAttacking) return;
@@ -52,13 +64,14 @@ namespace Entities.WereWolf
             ApplyStrike();
         }
 
-        public void DoFinisherDeath()
+        // Apply
+        private void ApplyFinisherDeath()
         {
-            if (!IsDead) return;
+            deathIsCompleted = true;
+            Target.gameObject.SetActive(false);
             animator.SetTrigger(FINISHER_DEATH_ANIMATOR_TRIGGER);
         }
 
-        // Apply
         private void ApplyCries()
         {
             ApplyAttack(2, 5);
@@ -85,5 +98,16 @@ namespace Entities.WereWolf
 
         public void ApplyHeadOutAttack() =>
             GiantHeadModule.Attack();
+
+        public void ApplyFinisherDeathEnd()
+        {
+            Target.gameObject.SetActive(true);
+            finisherDeathDropTargetPoint.localPosition = 
+                new Vector3(-FaceDirection * finisherDeathDropTargetPoint.localPosition.x, finisherDeathDropTargetPoint.localPosition.y);
+            Target.position = finisherDeathDropTargetPoint.position;
+        }
+
+        public void SetTarget(Transform target) =>
+            Target = target;
     }
 }

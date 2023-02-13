@@ -8,7 +8,6 @@ namespace Entities.Heeloy
     {
         private const string SIT_ANIMATOR_TRIGGER = "Sit";
         private const string STAND_ANIMATOR_TRIGGER = "Stand";
-        private const string WALK_ANIMATOR_INT = "Walk";
         private const string DODGE_ANIMATOR_TRIGGER = "Dodge";
         private const string DODGE_END_ANIMATOR_TRIGGER = "DodgeEnd";
         private const string JUMP_ANIMATOR_TRIGGER = "Jump";

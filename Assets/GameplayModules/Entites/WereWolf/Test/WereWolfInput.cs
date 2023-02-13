@@ -7,8 +7,9 @@ namespace Entities.WereWolf.Inputs
     {
         private WereWolf owner;
         [SerializeField] private string horizontalMove = "Horizontal";
-        [SerializeField] private KeyCode HeadInAttack = KeyCode.Alpha6;
         [SerializeField] private KeyCode Death = KeyCode.Alpha5;
+        [SerializeField] private KeyCode HeadInAttack = KeyCode.Alpha6;
+        [SerializeField] private KeyCode JumpInOutAttack = KeyCode.Alpha7;
 
         private void Awake() => owner = GetComponent<WereWolf>();
 
@@ -16,15 +17,18 @@ namespace Entities.WereWolf.Inputs
         {
             owner.SetHorizontalSpeed(Input.GetAxis(horizontalMove));
 
-            if (Input.GetKeyDown(HeadInAttack))
-                owner.GiantHeadModule.DoAttack();
-
             if (Input.GetKeyDown(Death))
             {
                 if (!owner.IsDead)
                     owner.DoDeath();
                 else owner.DoFinisherDeath();
             }
+
+            if (Input.GetKeyDown(HeadInAttack))
+                owner.GiantHeadModule.DoAttack();
+
+            if (Input.GetKeyDown(JumpInOutAttack))
+                owner.JumpOutAttackModule.DoAttack();
         }
 
 

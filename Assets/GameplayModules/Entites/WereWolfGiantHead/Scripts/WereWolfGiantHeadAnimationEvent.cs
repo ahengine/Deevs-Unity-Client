@@ -1,6 +1,4 @@
-using Entities.WereWolf.HeadGiant;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Entities.WereWolf.HeadGiant
 {

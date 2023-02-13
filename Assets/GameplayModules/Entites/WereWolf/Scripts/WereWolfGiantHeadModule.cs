@@ -28,10 +28,11 @@ namespace Entities.WereWolf.Moudles
 
         public bool DoAttack()
         {
-            if (HeadInGround) return true;
+            if (HeadInGround || !controller.DoAttack()) return true;
 
             HeadInGround = true;
             animator.SetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
+            controller.ApplyAttack();
             giantHead.DoAttack();
             return false;
         }

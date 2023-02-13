@@ -20,6 +20,7 @@ namespace Entities
 
         public bool IsDead { protected set; get; }
         public bool IsAttacking { protected set; get; }
+        public bool IsAllowMove { protected set; get; } = true;
         protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
         [field: SerializeField] public Health Health { protected set; get; }
 
@@ -34,6 +35,7 @@ namespace Entities
 
         public virtual void SetHorizontalSpeed(float value)
         {
+            if (!IsAllowMove) return;
             cc.SetHorizontal(value);
             if (spr) spr.flipX = cc.FaceDirection == -1;
             animator.SetFloat(WALK_ANIMATOR_FLOAT, Mathf.Abs(cc.Velocity.x));
@@ -43,7 +45,7 @@ namespace Entities
         public virtual void DoPlayAnimation(string name) => animator.Play(name);
         public virtual void DoAddHealth(int value) => ApplyAddHealth(value);
         public virtual bool DoAttack() => !IsAttacking;
-        public virtual void DoDamage(int damage) => Health.ApplyDamage(damage);
+        public virtual void DoDamage(int damage) { Health.ApplyDamage(damage); print(name + " [Damaged]: " + damage); }
         public virtual void DoDeath()
         {
             if (IsDead) return;
@@ -83,12 +85,28 @@ namespace Entities
             else
                 tr.Ray2D<IDamagable>(distance, attackLayer)?.DoDamage(damage);
         }
+        public virtual void ApplyAttack(bool allowMove = false)
+        {
+            IsAttacking = true;
+            IsAllowMove = allowMove;
+            animator.SetBool(ATTACK_ANIMATOR_BOOL, true);
+        }
 
         // Events
         public virtual void AttackEnd()
         {
             IsAttacking = false;
+            IsAllowMove = true;
             animator.SetBool(ATTACK_ANIMATOR_BOOL, false);
+        }
+
+        public void SetAllowMove(bool allowMove) =>
+            IsAllowMove = allowMove;
+
+        public void SetState(bool value)
+        {
+            SetAllowMove(value);
+            cc.SetState(value);
         }
     }
 }

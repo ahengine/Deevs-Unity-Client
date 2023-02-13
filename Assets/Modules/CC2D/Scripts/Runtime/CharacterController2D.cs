@@ -6,6 +6,7 @@ using Unity.Mathematics;
 namespace CC2D
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Collider2D))]
     public class CharacterController2D : MonoBehaviour
     {
         [SerializeField] private float horizontalSpeed = 1;
@@ -17,6 +18,7 @@ namespace CC2D
 
         public Transform Tr { private set; get; }
         private Rigidbody2D rb;
+        private Collider2D col;
         internal int FaceDirection { private set; get; } = 1;
         public bool AllowAction { private set; get; } = true;
 
@@ -34,6 +36,7 @@ namespace CC2D
         private void Awake()
         {
             Tr = transform;
+            col = GetComponent<Collider2D>();
             rb = GetComponent<Rigidbody2D>();
 
             for (int i = 0; i < Modules.Length; i++)
@@ -68,6 +71,14 @@ namespace CC2D
             AllowAction = value;
             if (!AllowAction)
                 VelocityX = 0;
+        }
+
+        public void SetState(bool value)
+        {
+            col.enabled = value;
+            rb.simulated = value;
+            if (!value) rb.velocity = Vector2.zero;
+            AllowAction = value;
         }
     }
 }
