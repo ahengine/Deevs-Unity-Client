@@ -1460,6 +1460,10 @@ PrefabInstance:
       propertyPath: attackTarget
       value: 
       objectReference: {fileID: 1963624760}
+    - target: {fileID: 7836300307481868620, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
+      propertyPath: <AttackTarget>k__BackingField
+      value: 
+      objectReference: {fileID: 1963624760}
     - target: {fileID: 8745684149232181726, guid: d4980f4c77598294e9c51c7afeb7dc5d, type: 3}
       propertyPath: m_RootOrder
       value: 6
