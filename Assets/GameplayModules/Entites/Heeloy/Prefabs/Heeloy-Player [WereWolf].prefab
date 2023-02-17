@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6302908960382654283, guid: 2e45c62ba3af1174b8ed31250f3a4883, type: 3}
       propertyPath: m_Name
-      value: Heeloy-Player
+      value: Heeloy-Player [WereWolf]
       objectReference: {fileID: 0}
     - target: {fileID: 6302908960382654284, guid: 2e45c62ba3af1174b8ed31250f3a4883, type: 3}
       propertyPath: m_RootOrder

@@ -325,6 +325,7 @@ MonoBehaviour:
   <Health>k__BackingField:
     <Default>k__BackingField: 100
     <Max>k__BackingField: 100
+  fallingSky: 0
   swordAttack:
     actionCount: 5
     starterRangeIndex: {x: 0, y: 3}
@@ -336,6 +337,7 @@ MonoBehaviour:
   camTarget: {fileID: 6302908960729938678}
   footStepSFX: {fileID: 725036682884705651}
   landFromSkyDamage: {x: 5, y: 8}
+  target: {fileID: 0}
 --- !u!114 &6302908960382654288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fuckOffPushBackSpeed: 0.3
+  dashStrikePushBackSpeed: 0.6
   strike2Part2PushBackSpeed: 0.3
 --- !u!1 &6302908960729938677
 GameObject:

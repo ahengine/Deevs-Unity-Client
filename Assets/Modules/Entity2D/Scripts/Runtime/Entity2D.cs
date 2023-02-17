@@ -1,5 +1,6 @@
 using UnityEngine;
 using CC2D;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Entities
 {
@@ -39,9 +40,12 @@ namespace Entities
         {
             if (BusyForNewAction && !notUserInput) return;
             cc.SetHorizontal(value);
-            FootstepSFXHandling(value, reverseDirection);
-            if(value != 0)
-                SetFaceDirection(value>0,reverseDirection);
+
+            if (value != 0)
+            {
+                SetFaceDirection(value > 0, reverseDirection);
+                FootstepSFXHandling(value, reverseDirection);
+            }
             animator.SetFloat(WALK_ANIMATOR_FLOAT, Mathf.Abs(cc.Velocity.x));
         }
 
@@ -128,7 +132,7 @@ namespace Entities
             cc.SetState(value);
         }
 
-        public void DamageState(bool value)
+        public virtual void DamageState(bool value,bool changeLayer = true)
         {
             ResetAllStates();
             IsDamaging = value;
@@ -139,5 +143,9 @@ namespace Entities
             IsAttacking = false;
             IsDamaging = false;
         }
+
+        public virtual void DoDamageOnSky(int damage) { Health.ApplyDamage(damage); print(name + " [Damaged]: " + damage); }
+
+        public virtual bool DoAttackByDistance(float distance,int damage) => false;
     }
 }

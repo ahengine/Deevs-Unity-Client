@@ -62,9 +62,9 @@ namespace Entities.WereWolf.Moudles
 
             if (successAttack)
             {
-                owner.Target.GetComponent<IDamagable>().
-                    DoDamage(Random.Range(damageRange.x, damageRange.y));
                 owner.Target.gameObject.SetActive(false);
+                owner.Target.GetComponent<IDamagable>().
+                        DoDamageOnSky(Random.Range(damageRange.x, damageRange.y));
             }
         }
         public void AttackEnd()

@@ -68,7 +68,7 @@ namespace Entities.WereWolf.HeadGiant
             owner.Target.position = leftTargetPoint.position;
             owner.Target.gameObject.SetActive(true);
             var damagableTarget = owner.Target.GetComponent<IDamagable>();
-            if (damagableTarget != null) damagableTarget.DoDamage(Random.Range(damageRange.x,damageRange.y));
+            if (damagableTarget != null) damagableTarget.DoDamageOnSky(Random.Range(damageRange.x,damageRange.y));
             lastAttackState = true;
             EndAttack();
         }

@@ -229,45 +229,24 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5
-    functionName: SetAttackVDamage
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 6
-    messageOptions: 0
   - time: 2.5833333
     functionName: DoAttackByDistanceAbility01
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: ee3c6bdf3fa646141b4572f8c5fcad8c, type: 2}
     floatParameter: 0.8
     intParameter: 0
-    messageOptions: 0
-  - time: 3.25
-    functionName: SetAttackVDamage
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 6
     messageOptions: 0
   - time: 3.3333333
     functionName: DoAttackByDistanceAbility02
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: ac11d493b45ddac49b3d121d992192ab, type: 2}
     floatParameter: 1
     intParameter: 0
-    messageOptions: 0
-  - time: 4.9166665
-    functionName: SetAttackVDamage
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 7
     messageOptions: 0
   - time: 5
     functionName: DoAttackByDistanceAbility03
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: 9e99bf7982489344fa41c4a26691dda1, type: 2}
     floatParameter: 1.7
     intParameter: 0
     messageOptions: 0

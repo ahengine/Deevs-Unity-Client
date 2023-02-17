@@ -8,6 +8,9 @@ namespace Entities
 
         void DoAddHealth(int value);
         void DoDamage(int damage);
+
+        void DoDamageOnSky(int damage);
+
         void DoDeath();
     }
 }

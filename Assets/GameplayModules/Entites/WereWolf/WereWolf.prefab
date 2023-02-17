@@ -218,7 +218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3747763470735837478}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0012, y: 0.33210003, z: 0.0064726537}
+  m_LocalPosition: {x: 0.0012, y: 0.333, z: 0.0064726537}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 3747763471990657609}
   - component: {fileID: 90616040}
   - component: {fileID: 447326961737999609}
+  - component: {fileID: 311001105}
   m_Layer: 10
   m_Name: WereWolf
   m_TagString: Untagged
@@ -471,7 +472,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -515,7 +516,7 @@ MonoBehaviour:
   firstStrike: 0
   finisherDeathDropTargetPoint: {fileID: 7925849423493052317}
   groundDamagedPrefab: {fileID: 6511140186497526821, guid: 857641d72837b774ab59a4d2e641c5b9, type: 3}
-  groundDamagedY: -0.314
+  groundDamagedY: -0.333
   bloodyRain: {fileID: 0}
   backwardWalkSpeedPrecentOfRun: 0.4
   fuckOffDamage: {x: 2, y: 4}
@@ -538,7 +539,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3747763471990657608}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f72e76a3ae8c075418f8b31256d28182, type: 3}
   m_Name: 
@@ -558,14 +559,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3747763471990657608}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45566375bf67006498a9e8cad036b478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkRangeDistance: {x: 0.4, y: 3}
+  minDistanceLocomotion: 0.05
+  walkRangeDistance: {x: 0.2, y: 3}
   backwardDistance: 0.25
-  idleToBackwardDistance: 0.2
+  idleToBackwardDistance: 0.1
   fuckOff:
     distance: {x: 0.2, y: 0.4}
     chance: {x: 2, y: 7}
@@ -578,7 +580,7 @@ MonoBehaviour:
     distance: {x: 3, y: 4}
     chance: {x: 1, y: 5}
     attack: 2
-  meleeAttackRate: 1
+  meleeAttackRate: 2.5
   cries:
     distance: {x: 0.3, y: 1}
     chance: {x: 2, y: 5}
@@ -595,6 +597,60 @@ MonoBehaviour:
   locomotionStates: 0
   finisherKey: 101
   finisherDistance: 0.5
+  OnPhaseTwo:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MusicManager, Assembly-CSharp
+        m_MethodName: PlayNextMusic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnDeathWaitForFinisher:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MusicManager, Assembly-CSharp
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &311001105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747763471990657608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7716580c409c03043bfe1348ebbf6854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4024864062811103205
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ namespace Entities.Heeloy
         private const string ON_LAND_JUMP_ANIMATOR_TRIGGER = "OnLand";
         protected const string DEATH_SKY_ANIMATOR_TRIGGER = "DeathSky";
         protected const string FALLING_SKY_ANIMATOR_TRIGGER = "FallingSky";
-        private bool fallingSky;
+        [SerializeField] private bool fallingSky;
 
         private JumpModule jumpModule;
         private DodgeModule dodgeModule;
@@ -62,12 +62,6 @@ namespace Entities.Heeloy
 
             if (pushBackHorizontal)
                 SetHorizontalSpeed(pushBackHorizontalSpeed, true, true);
-        }
-
-        private void OnEnable()
-        {
-            if (jumpModule.IsFalling())
-                FallingInSky();
         }
 
         public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false)
@@ -169,7 +163,14 @@ namespace Entities.Heeloy
         }
 
         // Health
-        public override void DoDamage(int damage) { Health.ApplyDamage(damage); print("damage: " + damage); }
+
+        // Must be change this algorithm after demo [Falling SKY]
+        public override void DoDamageOnSky(int damage)
+        {
+            base.DoDamageOnSky(damage);
+            fallingSky = true;
+        }
+
         public override void DoDeath()
         {
             
@@ -261,9 +262,20 @@ namespace Entities.Heeloy
         private void OnFall()
         {
             animator.ResetTrigger(ON_LAND_JUMP_ANIMATOR_TRIGGER);
-            if (fallingSky) return;
+            if (fallingSky)
+            {
+                print("FALLING SKY -------------------------------------");
+                FallingInSky();
+                return;
+            }
             animator.SetTrigger(FALL_ANIMATOR_TRIGGER);
         }
+        public void FallingInSky()
+        {
+            animator.SetTrigger(FALLING_SKY_ANIMATOR_TRIGGER);
+            jumpModule.OnGround += OnLandFromSky;
+        }
+        public void FallingSky(bool falling) => fallingSky = falling;
         private void OnGround()
         {
             fallingSky = false;
@@ -292,38 +304,49 @@ namespace Entities.Heeloy
 
         #endregion
 
+        public override void DamageState(bool value, bool changeLayer = true)
+        {
+            base.DamageState(value, changeLayer);
+
+            if (value)
+            {
+                if (changeLayer)
+                    gameObject.layer = LayerMask.NameToLayer(PLAYER_GHOST_LAYER);
+            }
+            else
+                gameObject.layer = LayerMask.NameToLayer(PLAYER_LAYER);
+        }
+
         // This Part Just for demo
         [SerializeField] private Transform target;
-        private int attackValue;
 
-        public void SetAttackDamage(int attackValue) =>
-            this.attackValue = attackValue;
-        public bool DoAttackByDistance(float distance)
+        public override bool DoAttackByDistance(float distance, int damage)
         {
-            if(!target)
+            base.DoAttackByDistance(distance, damage);
+
+            if (!target)
                 return false;
 
             Vector2 pos = tr.position;
 
             // Change to Ray Attack or register enemies to enemy system
-            if (FloatHelper.InBetween(target.position.x,pos.x,pos.x + (cc.FaceDirection * distance)))
+            if (FloatHelper.InBetween(target.position.x, pos.x, pos.x + (cc.FaceDirection * distance)))
             {
                 var damagable = target.GetComponent<IDamagable>();
 
                 if (damagable != null)
                 {
-                    damagable.DoDamage(attackValue);
+                    damagable.DoDamage(damage);
                     doAttackSpecial?.Invoke(damagable);
                     return true;
                 }
             }
 
-             return false;
+            return false;
         }
-
-        public void DoSwordAbilityAttackByDistance(float distance,int index)
+        public void DoSwordAbilityAttackByDistance(float distance,int damage,int index)
         {
-            if(DoAttackByDistance(distance))
+            if(DoAttackByDistance(distance,damage))
             {
                 var attack = target.GetComponent<SwordAbilityInteraction>();
                 if (!attack) return;
@@ -342,14 +365,6 @@ namespace Entities.Heeloy
                         break;
                 }
             }
-        }
-
-        public void FallingInSky()
-        {
-            if (fallingSky) return;
-            fallingSky = true;
-            animator.SetTrigger(FALLING_SKY_ANIMATOR_TRIGGER);
-            jumpModule.OnGround += OnLandFromSky;
         }
     }
 }

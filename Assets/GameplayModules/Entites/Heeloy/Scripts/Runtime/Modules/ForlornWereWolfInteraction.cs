@@ -54,7 +54,7 @@ namespace Entities.Heeloy.Moudles
             heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
             heeloy.DoPlayAnimation(SWORD_02_PART1_ANIMATOR_STATE);
-            heeloy.DamageState(true);
+            heeloy.DamageState(true,false);
         }
 
         public void ApplyHitStrikeSword02Part2(bool faceDirection, int damage)

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -41,20 +42,16 @@ namespace Entities.Heeloy
             audioSource.Play();
         }
 
-        public void SetAttackVDamage(int attackDamage) =>
-            heeloy.SetAttackDamage(attackDamage);
+        public void DoAttackByDistanceAbility01(AttackCard handler) =>
+            heeloy.DoSwordAbilityAttackByDistance(handler.distance,handler.Damage, 0);
 
-        public bool DoAttackByDistance(float distance) =>
-            heeloy.DoAttackByDistance(distance);
+        public void DoAttackByDistanceAbility02(AttackCard handler) =>
+            heeloy.DoSwordAbilityAttackByDistance(handler.distance, handler.Damage, 1);
 
+        public void DoAttackByDistanceAbility03(AttackCard handler) =>
+            heeloy.DoSwordAbilityAttackByDistance(handler.distance, handler.Damage, 2);
 
-        public void DoAttackByDistanceAbility01(float distance) =>
-            heeloy.DoSwordAbilityAttackByDistance(distance, 0);
-
-        public void DoAttackByDistanceAbility02(float distance) =>
-            heeloy.DoSwordAbilityAttackByDistance(distance, 1);
-
-        public void DoAttackByDistanceAbility03(float distance) =>
-            heeloy.DoSwordAbilityAttackByDistance(distance, 2);
+        public void DoAttack(AttackCard handler) =>
+            heeloy.DoAttackByDistance(handler.distance, handler.Damage);
     }
 }

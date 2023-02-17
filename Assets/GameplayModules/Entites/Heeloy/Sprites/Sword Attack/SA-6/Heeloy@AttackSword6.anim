@@ -94,17 +94,10 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.083333336
-    functionName: SetAttackVDamage
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 3
-    messageOptions: 0
   - time: 0.5
-    functionName: DoAttackByDistance
+    functionName: DoAttack
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: b5d08d7c1b63fce48b4b7cae47978dbe, type: 2}
     floatParameter: 0.23
     intParameter: 0
     messageOptions: 0

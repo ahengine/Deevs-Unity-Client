@@ -82,17 +82,10 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.083333336
-    functionName: DoAttackByDistance
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 2.4
-    intParameter: 5
-    messageOptions: 0
   - time: 0.33333334
-    functionName: 
+    functionName: DoAttack
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: bf42367743affce4ebadfc4b75449c44, type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

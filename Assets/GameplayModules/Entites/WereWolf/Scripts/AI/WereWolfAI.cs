@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Entities.WereWolf.AI
 {
@@ -10,7 +11,8 @@ namespace Entities.WereWolf.AI
         public WereWolf Owner { private set; get; }
         private Action locomotionAction;
 
-        [Header("Idle")]
+        [Header("Locomotion")]
+        [SerializeField] private float minDistanceLocomotion = .05f;
         [SerializeField] private Vector2 walkRangeDistance = new Vector2(1.5f,5);
         [SerializeField] private float backwardDistance = .4f;
         [SerializeField] private float idleToBackwardDistance = .75f;
@@ -27,12 +29,17 @@ namespace Entities.WereWolf.AI
         [SerializeField] private float distanceAttackRate = 6;
 
         private float attackLastTime;
-        private float targetDistance;
+        [SerializeField] private float targetDistance;
 
         [SerializeField] private LocomotionStates locomotionStates;
         [SerializeField] private KeyCode finisherKey = KeyCode.E;
         [SerializeField] private float finisherDistance = .3f;
         private bool finisherIsStart;
+        [SerializeField] private UnityEvent OnPhaseTwo;
+        [SerializeField] private UnityEvent OnDeathWaitForFinisher;
+
+        private float SpeedToTarget =>
+            Owner.Target.position.x > transform.position.x ? 1 : -1;
 
         private void Awake()
         {
@@ -41,7 +48,8 @@ namespace Entities.WereWolf.AI
 
         private void Start()
         {
-            Owner.Health.OnDamage += DoCriesOnHalfHealth;
+            Owner.Health.OnDamage += Phase2;
+            Owner.Health.OnDeath += ()=> OnDeathWaitForFinisher.Invoke();
             attackLastTime = Time.time;
 
             GoToIdle();
@@ -65,7 +73,10 @@ namespace Entities.WereWolf.AI
 
             if (!Owner.IsAttacking)
             {
-                locomotionAction?.Invoke();
+                if (targetDistance > minDistanceLocomotion)
+                    locomotionAction();
+                else
+                    Owner.SetHorizontalSpeed(0);
                 Attack();
             }
             else
@@ -80,8 +91,8 @@ namespace Entities.WereWolf.AI
             locomotionAction = Idle;
         }
         private void Idle()
-        {
-            Owner.SetFaceDirection(Owner.TargetFrontOnMe);
+        {   
+           Owner.SetFaceDirection(Owner.Target.position.x > transform.position.x);
 
             if (targetDistance > walkRangeDistance.x)
             {
@@ -100,7 +111,7 @@ namespace Entities.WereWolf.AI
         }
         private void Walk()
         {
-            Owner.SetHorizontalSpeed(Owner.TargetFrontOnMe ? 1 : -1);
+            Owner.SetHorizontalSpeed(SpeedToTarget);
 
             if (!FloatHelper.InBetween(targetDistance, walkRangeDistance))
                 GoToIdle();
@@ -113,7 +124,7 @@ namespace Entities.WereWolf.AI
         }
         private void BackwardWalk()
         {
-            Owner.SetHorizontalSpeed(Owner.TargetFrontOnMe ? -1 : 1,true,true);
+            Owner.SetHorizontalSpeed(-SpeedToTarget, true,true);
 
             if (targetDistance > backwardDistance)
                 GoToIdle();
@@ -190,12 +201,13 @@ namespace Entities.WereWolf.AI
             }
         }
 
-        private void DoCriesOnHalfHealth(int damage)
+        private void Phase2(int damage)
         {
             if(Owner.Health.Current <= Owner.Health.Max/2)
             {
-                Owner.Health.OnDamage -= DoCriesOnHalfHealth;
+                Owner.Health.OnDamage -= Phase2;
                 Owner.DoCries(true);
+                OnPhaseTwo.Invoke();
             }
         }
     }
