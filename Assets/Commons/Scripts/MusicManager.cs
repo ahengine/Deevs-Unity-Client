@@ -13,7 +13,9 @@ public class MusicManager : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
         volume = audioSource.volume;
+        Play();
     }
 
     public void Play()

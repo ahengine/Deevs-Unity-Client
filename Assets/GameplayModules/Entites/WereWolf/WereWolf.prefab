@@ -524,13 +524,14 @@ MonoBehaviour:
   strike1Damage: {x: 2, y: 4}
   strike2Part1Damage: {x: 2, y: 4}
   strike2Part2Damage: {x: 3, y: 6}
-  fuckOffDistanceAttack: 0.4
-  DashStrikeDistanceAttack: 0.25
-  strike1DistanceAttack: 0.25
-  strike2Part1DistanceAttack: 0.25
-  strike2Part2DistanceAttack: 0.75
+  fuckOffDistanceAttack: {x: 0.35, y: 0.125}
+  DashStrikeDistanceAttack: {x: 0.35, y: 0.175}
+  strike1DistanceAttack: {x: 0.35, y: 0.125}
+  strike2Part1DistanceAttack: {x: 0.35, y: 0.125}
+  strike2Part2DistanceAttack: {x: 0.8, y: 0.1}
   runFootstep: {fileID: 5867293031052761851}
   backWardWalkFootstep: {fileID: 4947209435419739074}
+  pushBackDamage: 0.03
   dashStrikeSpeed: 1.5
 --- !u!114 &90616040
 MonoBehaviour:
@@ -565,53 +566,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDistanceLocomotion: 0.05
-  walkRangeDistance: {x: 0.2, y: 3}
-  backwardDistance: 0.25
-  idleToBackwardDistance: 0.1
+  walkRangeDistance: {x: 0.35, y: 3}
+  backwardDistance: 0.35
+  backwardComboDamageCount: 3
   fuckOff:
-    distance: {x: 0.2, y: 0.4}
+    distance: {x: 0.1, y: 0.4}
     chance: {x: 2, y: 7}
     attack: 0
   strike:
-    distance: {x: 0.3, y: 1.5}
+    distance: {x: 0.1, y: 0.8}
     chance: {x: 2, y: 10}
     attack: 1
   dashStrike:
-    distance: {x: 3, y: 4}
+    distance: {x: 0.7, y: 1.2}
     chance: {x: 1, y: 5}
     attack: 2
   meleeAttackRate: 2.5
   cries:
-    distance: {x: 0.3, y: 1}
-    chance: {x: 2, y: 5}
+    distance: {x: 0.3, y: 100}
+    chance: {x: 2, y: 3}
     attack: 3
   jumpInOut:
-    distance: {x: 0.3, y: 1}
-    chance: {x: 2, y: 5}
+    distance: {x: 0.3, y: 100}
+    chance: {x: 4, y: 10}
     attack: 4
   giantHead:
-    distance: {x: 0.3, y: 1}
-    chance: {x: 2, y: 5}
+    distance: {x: 0.3, y: 100}
+    chance: {x: 1, y: 7}
     attack: 5
-  distanceAttackRate: 6
+  distanceAttackRate: 3
+  JumpInOutAttackPlayOnHealthPrecent: 0.7
+  giantHeadAttackPlayOnHealthPrecent: 0.2
+  targetDistance: 0
   locomotionStates: 0
   finisherKey: 101
   finisherDistance: 0.5
   OnPhaseTwo:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MusicManager, Assembly-CSharp
         m_MethodName: PlayNextMusic
@@ -639,6 +631,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  comboDamageRate: 0.8
 --- !u!114 &311001105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -803,7 +796,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5371740258382545293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.171, y: 0.892, z: 0}
+  m_LocalPosition: {x: -0.171, y: 1.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

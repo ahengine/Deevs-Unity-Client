@@ -22,6 +22,7 @@ namespace Entities.WereWolf
         [field:SerializeField] public WereWolfJumpOutAttackModule JumpOutAttackModule { private set; get; }
         [field:SerializeField] private bool firstStrike;
 
+        public bool FinisherIsStarted { private set; get; }
         public bool DeathIsCompleted { private set; get; }
         [SerializeField] private Transform finisherDeathDropTargetPoint;
         [SerializeField, Space(2)] private GameObject groundDamagedPrefab;
@@ -33,13 +34,14 @@ namespace Entities.WereWolf
         [SerializeField,Space(2)] private Vector2Int strike1Damage;
         [SerializeField,Space(2)] private Vector2Int strike2Part1Damage;
         [SerializeField,Space(2)] private Vector2Int strike2Part2Damage;
-        [SerializeField] private float fuckOffDistanceAttack;
-        [SerializeField] private float DashStrikeDistanceAttack = .25f;
-        [SerializeField] private float strike1DistanceAttack = .25f;
-        [SerializeField] private float strike2Part1DistanceAttack = .25f;
-        [SerializeField] private float strike2Part2DistanceAttack = .75f;
+        [SerializeField] private Vector2 fuckOffDistanceAttack = new Vector2(.25f, .125f);
+        [SerializeField] private Vector2 DashStrikeDistanceAttack = new Vector2(.25f, .175f);
+        [SerializeField] private Vector2 strike1DistanceAttack = new Vector2(.25f, .125f);
+        [SerializeField] private Vector2 strike2Part1DistanceAttack = new Vector2(.25f, .125f);
+        [SerializeField] private Vector2 strike2Part2DistanceAttack = new Vector2(.8f, .1f);
         [SerializeField] private AudioSource runFootstep;
         [SerializeField, Space(2)] private AudioSource backWardWalkFootstep;
+        [SerializeField] private float pushBackDamage = .1f;
         public bool IsBackwardMove { private set; get; }
         public bool IsDashStriking { private set; get; }
         private int attackDirection;
@@ -49,15 +51,18 @@ namespace Entities.WereWolf
             base.Awake();
             GiantHeadModule.Init(this,animator);
             JumpOutAttackModule.Init(this,animator);
+            Health.OnDeath += ApplyDeath;
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (IsDashStriking)
                 SetHorizontalSpeed(dashStrikeSpeed * attackDirection, true);
         }
 
-        public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false)
+        public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false, bool WalkAnimate = true)
         {
             if (reverseDirection)
                 value *= backwardWalkSpeedPrecentOfRun;
@@ -98,10 +103,13 @@ namespace Entities.WereWolf
         public override void DoDamage(int damage)
         {
             base.DoDamage(damage);
+
+            ResetAllStates();
+            tr.position += new Vector3(pushBackDamage * (tr.position.x < Target.position.x ? -1 : 1),0);
         }
         public void DoFinisherDeath()
         {
-            if (DeathIsCompleted) return;
+            if (FinisherIsStarted) return;
 
             ApplyFinisherDeath();
         }
@@ -139,16 +147,17 @@ namespace Entities.WereWolf
         }
         private void ApplyFinisherDeath()
         {
-            DeathIsCompleted = true;
+            FinisherIsStarted = true;
             Target.gameObject.SetActive(false);
             animator.SetTrigger(FINISHER_DEATH_ANIMATOR_TRIGGER);
         }
         private void ApplyCries()
         {
             ApplyAttack();
-            bloodyRain.Do();
             animator.SetTrigger(CRIES_TRIGGER_ANIMATOR);
         }
+
+        public void DoBloodyRain() => bloodyRain.Do();
 
         private void ApplyDashStrike()
         {
@@ -171,9 +180,10 @@ namespace Entities.WereWolf
         public void ApplyFinisherDeathEnd()
         {
             Target.gameObject.SetActive(true);
-            finisherDeathDropTargetPoint.localPosition = 
+            finisherDeathDropTargetPoint.localPosition =
                 new Vector3(-FaceDirection * finisherDeathDropTargetPoint.localPosition.x, finisherDeathDropTargetPoint.localPosition.y);
             Target.position = finisherDeathDropTargetPoint.position;
+            DeathIsCompleted = true;
         }
 
         public void SetTarget(Transform target) =>
@@ -184,7 +194,7 @@ namespace Entities.WereWolf
             IsBackwardMove = value;
         public void ApplyFuckOffDamage()
         {
-            if (!TargetFrontOnMe || DistanceToTarget > fuckOffDistanceAttack) return;
+            if (!TargetFrontOnMe || CheckAttackDistance(fuckOffDistanceAttack)) return;
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
@@ -192,7 +202,7 @@ namespace Entities.WereWolf
         }
         public void ApplyDashStrikeDamage()
         {
-            if (!TargetFrontOnMe || DistanceToTarget > DashStrikeDistanceAttack) return;
+            if (!TargetFrontOnMe || CheckAttackDistance(DashStrikeDistanceAttack)) return;
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
@@ -200,7 +210,7 @@ namespace Entities.WereWolf
         }
         public void ApplyStrike01Damage()
         {
-            if (!TargetFrontOnMe || DistanceToTarget > strike1DistanceAttack) return;
+            if (!TargetFrontOnMe || CheckAttackDistance(strike1DistanceAttack)) return;
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
@@ -208,7 +218,7 @@ namespace Entities.WereWolf
         }
         public void ApplyStrike02Part1Damage()
         {
-            if (!TargetFrontOnMe || DistanceToTarget > strike2Part1DistanceAttack) return;
+            if (!TargetFrontOnMe || CheckAttackDistance(strike2Part1DistanceAttack)) return;
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
@@ -217,7 +227,7 @@ namespace Entities.WereWolf
 
         public void ApplyStrike02Part2Damage()
         {
-            if (!TargetFrontOnMe || DistanceToTarget > strike2Part2DistanceAttack) return;
+            if (!TargetFrontOnMe || DistanceToTarget > strike2Part2DistanceAttack.x || Target.position.y > tr.position.y + strike2Part2DistanceAttack.y) return;
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
@@ -230,6 +240,9 @@ namespace Entities.WereWolf
             if (FloatHelper.InBetween(Target.position.x, attackRange.x, attackRange.y))
                 Target.GetComponent<IDamagable>().DoDamage(damage);
         }
+
+        private bool CheckAttackDistance(Vector2 distance) =>
+            DistanceToTarget > distance.x || Target.position.y > tr.position.y + distance.y;
 
         public void DashStriking(bool state)
         {

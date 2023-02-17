@@ -1,6 +1,7 @@
 using UnityEngine;
 using Entities.WereWolf.HeadGiant;
 using IEnumerator = System.Collections.IEnumerator;
+using Entities.Heeloy.Moudles;
 
 namespace Entities.WereWolf.Moudles
 {
@@ -9,7 +10,7 @@ namespace Entities.WereWolf.Moudles
     {
         private WereWolf controller;
 
-        private const string HEAD_IN_TRIGGER_ANIMATOR = "HeadIn";
+        private const string HEAD_IN_STATE_ANIMATOR = "Base Layer.Attack.GiantHead.HeadIn";
         private const string HEAD_OUT_TRIGGER_ANIMATOR = "HeadOut";
         private const string HEAD_OUT_SHUT_TRIGGER_ANIMATOR = "HeadOutShut";
 
@@ -28,20 +29,24 @@ namespace Entities.WereWolf.Moudles
             giantHead.SetOwner(this);
         }
 
-        public bool AllowAttack => controller && !HeadInGround || controller.DoAttack() && Target;
+        public bool AllowAttack => controller && !HeadInGround && Target;
 
         public Transform Target => controller.Target;
 
         public bool DoAttack()
         {
-            if (AllowAttack) return false;
+            if (!AllowAttack) return false;
 
-            animator.ResetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
+            controller.SetState(false);
+
+            if(controller.IsAttacking)
+                controller.AttackEnd();
+
             animator.ResetTrigger(HEAD_OUT_TRIGGER_ANIMATOR);
             animator.ResetTrigger(HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
 
             HeadInGround = true;
-            animator.SetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
+            animator.Play(HEAD_IN_STATE_ANIMATOR);
             controller.ApplyAttack();
             controller.StartCoroutine(GiantHeadDelay());
             return true;
@@ -55,15 +60,20 @@ namespace Entities.WereWolf.Moudles
 
         public void EndAttack(bool success)
         {
+            controller.SetState(true);
             animator.SetTrigger(success ? HEAD_OUT_TRIGGER_ANIMATOR : HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
             HeadInGround = false;
         }
 
         public void Attack()
         {
-            if (FloatHelper.TargetIsFrontOfSelf(controller.FaceDirection, controller.transform.position.x, Target.position.x) && 
+            if (controller.TargetFrontOnMe &&
                 FloatHelper.Distance(controller.transform.position.x, Target.position.x) < distanceHoriozntalAttack)
-                Target.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x, damageRange.y));
+            {
+                Debug.Log("HeadOut Attack");
+                //Target.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x, damageRange.y));
+                Target.GetComponent<ForlornWereWolfInteraction>().ApplyHitStrikeSword02Part2(controller.FaceDirection == 1, Random.Range(damageRange.x, damageRange.y));
+            }
         }
     }
 }

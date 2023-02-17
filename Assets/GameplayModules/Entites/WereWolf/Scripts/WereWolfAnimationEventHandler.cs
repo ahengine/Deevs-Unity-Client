@@ -49,5 +49,13 @@ namespace Entities.WereWolf
         public void DamageEnd() =>
                 owner.DamageState(false);
 
+        public void PushBack() =>
+            owner.PushBack();
+
+        public void PushBackStop() =>
+            owner.PushBackStop();
+
+        public void DoBloodyRain() =>
+            owner.DoBloodyRain();
     }
 }

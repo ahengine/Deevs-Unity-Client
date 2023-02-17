@@ -9,6 +9,7 @@ namespace Entities
         [field: SerializeField] public int Default { private set; get; } = 100;
         [field: SerializeField] public int Max { private set; get; } = 100;
         public int Current { private set; get; }
+        public float CurrentFillAmount => (float)Current / (float)Max;
 
         public event Action<int, int> OnAdd;
         public event Action<int> OnDamage;
@@ -23,7 +24,7 @@ namespace Entities
         public void Add(int value)
         {
             Current += value;
-            if(Current > Max) Max = Current;
+            if(Current > Max) Current = Max;
             OnAdd?.Invoke(Current, value);
         }
 
@@ -33,7 +34,6 @@ namespace Entities
 
             if (Current <= damage)
             {
-                Debug.Log("DEATH");
                 ApplyDeath();
                 return;
             }

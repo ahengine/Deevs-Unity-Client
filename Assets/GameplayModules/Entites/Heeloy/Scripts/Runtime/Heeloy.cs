@@ -12,7 +12,7 @@ namespace Entities.Heeloy
 
         private const string SIT_ANIMATOR_TRIGGER = "Sit";
         private const string STAND_ANIMATOR_TRIGGER = "Stand";
-        private const string DODGE_ANIMATOR_TRIGGER = "Dodge";
+        private const string DODGE_ANIMATOR_STATE = "Base Layer.Dodge.DodgeStart";
         private const string DODGE_END_ANIMATOR_TRIGGER = "DodgeEnd";
         private const string JUMP_ANIMATOR_TRIGGER = "Jump";
         private const string FALL_ANIMATOR_TRIGGER = "Fall";
@@ -34,12 +34,13 @@ namespace Entities.Heeloy
         private Vector2 camTargetPosition;
         protected override bool CantAttack => base.CantAttack || Dodging;
 
-        protected override bool BusyForNewAction => base.BusyForNewAction && Dodging;
+        protected override bool BusyForNewAction => base.BusyForNewAction || Dodging;
 
         [SerializeField] private AudioSource footStepSFX;
-        private float pushBackHorizontalSpeed;
-        private bool pushBackHorizontal;
         [SerializeField] private Vector2Int landFromSkyDamage = new Vector2Int(5, 8);
+        [SerializeField] private float hillOnSitRate = .1f;
+        [SerializeField] private int hillOnSit = 2;
+        private float lastHillOnSitTime;
 
         protected override void Awake()
         {
@@ -56,15 +57,22 @@ namespace Entities.Heeloy
             dodgeModule.OnComplete += DodgeComplete;
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            footStepSFX.mute = cc.VelocityY != 0 || Dodging || IsAttacking;
-
-            if (pushBackHorizontal)
-                SetHorizontalSpeed(pushBackHorizontalSpeed, true, true);
+            if (fallingSky)
+                FallingInSky();
         }
 
-        public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false)
+        protected override void Update()
+        {
+            base.Update();
+            footStepSFX.mute = cc.VelocityY != 0 || Dodging || IsAttacking;
+
+            if (IsSit)
+                HillingOnSit();
+        }
+
+        public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false, bool WalkAnimate = true)
         {
             base.SetHorizontalSpeed(value, notUserInput, reverseDirection);
 
@@ -86,13 +94,26 @@ namespace Entities.Heeloy
         protected override void ResetAllStates()
         {
             base.ResetAllStates();
-            Dodging = IsSit = false;
+            Dodging = false;
+            if(IsSit)
+            {
+                cc.SetAllowAction(true);
+                IsSit = false;
+            }
+        }
+
+        private void HillingOnSit()
+        {
+            if (lastHillOnSitTime + hillOnSitRate < Time.time)
+            {
+                Health.Add(hillOnSit);
+                lastHillOnSitTime = Time.time;
+            }
         }
 
         #region Do
 
         // Base
-
         public bool DoSit()
         {
             if (dodgeModule.IsActive || cc.Velocity.y != 0) return false;
@@ -115,7 +136,12 @@ namespace Entities.Heeloy
         }
         public bool DoDodge()
         {
-            if (!dodgeModule.AllowActivate() || BusyForNewAction) return false;
+            if (Dodging || cc.Velocity.y != 0) return false;
+
+            if (IsAttacking)
+                AttackEnd();
+
+            if (!dodgeModule.AllowActivate() || BusyForNewAction) return false; 
             ApplyDodge();
             return true;
         }
@@ -242,7 +268,7 @@ namespace Entities.Heeloy
             Dodging = true;
             gameObject.layer = LayerMask.NameToLayer(PLAYER_GHOST_LAYER);
             dodgeModule.DoActivate();
-            animator.SetTrigger(DODGE_ANIMATOR_TRIGGER);
+            animator.Play(DODGE_ANIMATOR_STATE);
             animator.ResetTrigger(DODGE_END_ANIMATOR_TRIGGER);
             
         }
@@ -263,17 +289,14 @@ namespace Entities.Heeloy
         {
             animator.ResetTrigger(ON_LAND_JUMP_ANIMATOR_TRIGGER);
             if (fallingSky)
-            {
-                print("FALLING SKY -------------------------------------");
-                FallingInSky();
                 return;
-            }
             animator.SetTrigger(FALL_ANIMATOR_TRIGGER);
         }
         public void FallingInSky()
         {
             animator.SetTrigger(FALLING_SKY_ANIMATOR_TRIGGER);
             jumpModule.OnGround += OnLandFromSky;
+            IsDamaging = true;
         }
         public void FallingSky(bool falling) => fallingSky = falling;
         private void OnGround()
@@ -292,15 +315,6 @@ namespace Entities.Heeloy
         {
             animator.SetTrigger(STAND_ANIMATOR_TRIGGER);
         }
-
-        public void PushBack() =>
-            pushBackHorizontal = true;
-
-        public void PushBackSpeed(float speed) =>
-            pushBackHorizontalSpeed = speed;
-
-        public void PushBackStop() =>
-            pushBackHorizontal = false;
 
         #endregion
 

@@ -1,14 +1,16 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using IEnumerator = System.Collections.IEnumerator;
 
 public class SplashEffect : MonoBehaviour
 {
     private Image img;
-    [SerializeField] private float startDelay = .1f;
     [SerializeField] private float durationShowHide = .1f;
     [SerializeField] private float showTime = .1f;
     public bool IsAnimating { private set; get; }
+
+    [SerializeField] private UnityEvent events;
 
     private Coroutine animatingCoroutine;
 
@@ -26,8 +28,6 @@ public class SplashEffect : MonoBehaviour
     {
         IsAnimating = true;
 
-        yield return new WaitForSeconds(startDelay);
-
         float timer = 0;
         Color color = img.color;
         while (timer < durationShowHide)
@@ -39,6 +39,7 @@ public class SplashEffect : MonoBehaviour
         }
         color.a = 1;
         img.color = color;
+        events.Invoke();
         yield return new WaitForSeconds(showTime);
 
         timer = 0;

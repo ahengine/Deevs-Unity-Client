@@ -7,7 +7,7 @@ namespace Entities.WereWolf.Moudles
     public class WereWolfJumpOutAttackModule
     {
         private const string SEEK_TRIGGER_ANIMATION = "Seek";
-        private const string JUMPIN_TRIGGER_ANIMATION = "JumpInAttack";
+        private const string JUMPIN_STATE_ANIMATION = "Base Layer.Attack.JumpInOutAttack.JumpIn";
         private const string JUMPOUT_TRIGGER_ANIMATION = "JumpOutAttack";
         private const string JUMPOOUT_ATTACK_SUCCESS_TRIGGER_ANIMATION = "JumpOutAttackSuccess";
 
@@ -32,7 +32,7 @@ namespace Entities.WereWolf.Moudles
         {
             owner.SetState(false);
             owner.ApplyAttack();
-            animator.SetTrigger(JUMPIN_TRIGGER_ANIMATION);
+            animator.Play(JUMPIN_STATE_ANIMATION);
             owner.StartCoroutine(JumpOutDelay());
         }
 

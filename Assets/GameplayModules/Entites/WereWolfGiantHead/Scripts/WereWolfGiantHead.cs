@@ -16,6 +16,7 @@ namespace Entities.WereWolf.HeadGiant
         [SerializeField] private Transform leftTargetPoint;
         [SerializeField] private float attackDistance = 2;
         [SerializeField] private float delayAttack = 2;
+        [SerializeField] private float delaySelectTargetBeforeAttack = 1;
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10, 20);
         private Animator animator;
         private SpriteRenderer sr;
@@ -36,20 +37,22 @@ namespace Entities.WereWolf.HeadGiant
 
         public void DoAttack()
         {
-            if (owner == null || !owner.AllowAttack)
+            if (owner == null)
                 return;
 
             position.x = owner.Target.position.x + targetDistance;
             tr.position = position;
 
             animator.SetTrigger(PREPARING_TRIGGER);
-            StartCoroutine(CoroutineHelper.CallActionWithDelay(()=> ApplyAttack(), delayAttack));
+            StartCoroutine(CoroutineHelper.CallActionWithDelay(ApplyAttack, delayAttack));
         }
 
         private void ApplyAttack()
         {
+            position.x = owner.Target.position.x + targetDistance;
+            tr.position = position;
             AttackTargetFocused = owner.Target.position;
-            animator.SetTrigger(ATTACK_TRIGGER);
+            StartCoroutine(CoroutineHelper.CallActionWithDelay(() => animator.SetTrigger(ATTACK_TRIGGER), delaySelectTargetBeforeAttack));
         }
 
         public void Attack()
@@ -66,9 +69,9 @@ namespace Entities.WereWolf.HeadGiant
         public void LeftTarget()
         {
             owner.Target.position = leftTargetPoint.position;
-            owner.Target.gameObject.SetActive(true);
             var damagableTarget = owner.Target.GetComponent<IDamagable>();
             if (damagableTarget != null) damagableTarget.DoDamageOnSky(Random.Range(damageRange.x,damageRange.y));
+            owner.Target.gameObject.SetActive(true);
             lastAttackState = true;
             EndAttack();
         }

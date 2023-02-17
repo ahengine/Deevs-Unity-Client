@@ -27,7 +27,7 @@ namespace Entities.Heeloy.Moudles
 
             heeloy.SetFaceDirection(!faceDirection);
             pushBackDirection = (faceDirection ? 1 : -1);
-            heeloy.PushBackSpeed(fuckOffPushBackSpeed * pushBackDirection);
+            heeloy.PushBackSettings(fuckOffPushBackSpeed * pushBackDirection);
             heeloy.DoPlayAnimation(FUCK_OFF_ANIMATOR_STATE);
             heeloy.DamageState(true);
         }
@@ -37,7 +37,7 @@ namespace Entities.Heeloy.Moudles
             heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
             pushBackDirection = (faceDirection ? 1 : -1);
-            heeloy.PushBackSpeed(dashStrikePushBackSpeed * pushBackDirection);
+            heeloy.PushBackSettings(dashStrikePushBackSpeed * pushBackDirection);
             heeloy.DoPlayAnimation(DASH_STRIKE_SWORD_ANIMATOR_STATE);
             heeloy.DamageState(true);
         }
@@ -62,7 +62,7 @@ namespace Entities.Heeloy.Moudles
             heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
             pushBackDirection = (faceDirection ? 1 : -1);
-            heeloy.PushBackSpeed(strike2Part2PushBackSpeed * pushBackDirection);
+            heeloy.PushBackSettings(strike2Part2PushBackSpeed * pushBackDirection);
             heeloy.DoPlayAnimation(SWORD_02_PART2_ANIMATOR_STATE);
             heeloy.DamageState(true);
         }

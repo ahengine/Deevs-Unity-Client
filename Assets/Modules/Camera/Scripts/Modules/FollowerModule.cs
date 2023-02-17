@@ -9,6 +9,7 @@ namespace Cam
         private Vector2 lastTargetPosition;
         [SerializeField] private float distanceFollow = .25f;
         [SerializeField] bool followVertical;
+        [SerializeField] private Transform secondTarget;
 
         protected override void UpdateData()
         {
@@ -19,6 +20,10 @@ namespace Cam
             bool AllowLeftFollow = targetDirection == -1 && controller.TargetEntity.position.x < controller.Tr.position.x + distanceFollow;
 
             Vector3 targetPos = controller.TargetCam.position;
+
+            if (secondTarget)
+                targetPos.x += FloatHelper.Distance(controller.TargetCam.position.x,secondTarget.position.x) / 2 * (secondTarget.position.x > controller.Tr.position.x?1:-1);
+
             if (!followVertical) targetPos.y = controller.Tr.position.y;
             targetPos.z = controller.Tr.position.z;
 

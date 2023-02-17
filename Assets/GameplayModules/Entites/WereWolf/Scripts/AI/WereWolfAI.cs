@@ -15,7 +15,7 @@ namespace Entities.WereWolf.AI
         [SerializeField] private float minDistanceLocomotion = .05f;
         [SerializeField] private Vector2 walkRangeDistance = new Vector2(1.5f,5);
         [SerializeField] private float backwardDistance = .4f;
-        [SerializeField] private float idleToBackwardDistance = .75f;
+        [SerializeField] private int backwardComboDamageCount = 3;
         [Header("Melee Attack")]
         [SerializeField] private WereWolfAttackData fuckOff;
         [SerializeField] private WereWolfAttackData strike;
@@ -27,6 +27,8 @@ namespace Entities.WereWolf.AI
         [SerializeField] private WereWolfAttackData jumpInOut;
         [SerializeField] private WereWolfAttackData giantHead;
         [SerializeField] private float distanceAttackRate = 6;
+        [SerializeField] private float JumpInOutAttackPlayOnHealthPrecent = .7f;
+        [SerializeField] private float giantHeadAttackPlayOnHealthPrecent = .2f;
 
         private float attackLastTime;
         [SerializeField] private float targetDistance;
@@ -37,6 +39,10 @@ namespace Entities.WereWolf.AI
         private bool finisherIsStart;
         [SerializeField] private UnityEvent OnPhaseTwo;
         [SerializeField] private UnityEvent OnDeathWaitForFinisher;
+
+        private int comboDamageCounter;
+        [SerializeField] private float comboDamageRate = .1f;
+        private float lastComboDamage;
 
         private float SpeedToTarget =>
             Owner.Target.position.x > transform.position.x ? 1 : -1;
@@ -49,6 +55,9 @@ namespace Entities.WereWolf.AI
         private void Start()
         {
             Owner.Health.OnDamage += Phase2;
+            Owner.Health.OnDamage += JumpInOutAttackOnDamaged;
+            Owner.Health.OnDamage += GiantHeadOnDamaged;
+            Owner.Health.OnDamage += damage => OnComboDamage();
             Owner.Health.OnDeath += ()=> OnDeathWaitForFinisher.Invoke();
             attackLastTime = Time.time;
 
@@ -57,11 +66,14 @@ namespace Entities.WereWolf.AI
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Y))
+                Owner.DoDamage(10);
+
             targetDistance = Owner.DistanceToTarget;
 
             if (Owner.IsDead)
             {
-                if (!finisherIsStart && !Owner.DeathIsCompleted)
+                if (!finisherIsStart && !Owner.FinisherIsStarted)
                     if (targetDistance < finisherDistance)
                         if (Input.GetKeyDown(finisherKey))
                         {
@@ -71,7 +83,7 @@ namespace Entities.WereWolf.AI
                 return;
             }
 
-            if (!Owner.IsAttacking)
+            if (!Owner.IsAttacking && !Owner.IsDamaging)
             {
                 if (targetDistance > minDistanceLocomotion)
                     locomotionAction();
@@ -99,9 +111,6 @@ namespace Entities.WereWolf.AI
                 GoToWalk();
                 return;
             }
-
-            if (targetDistance < idleToBackwardDistance)
-                GoToBackwardWalk();
         }
 
         private void GoToWalk()
@@ -133,7 +142,7 @@ namespace Entities.WereWolf.AI
 
         private void Attack()
         {
-            if (FloatHelper.InBetween(targetDistance, new Vector2(fuckOff.distance.x, dashStrike.distance.y)))
+            if (targetDistance < dashStrike.distance.y)
             {
                 if (attackLastTime + meleeAttackRate > Time.time)
                     return;
@@ -158,7 +167,7 @@ namespace Entities.WereWolf.AI
         private void AttackRandom(WereWolfAttackData[] attacks)
         {
             int randomChance = (int)(UnityEngine.Random.value * 10);
-            print("AttackRandom: "+randomChance);
+            //print("AttackRandom: "+randomChance);
             List<WereWolfAttackData> attacksSelected = new List<WereWolfAttackData>();
 
             for (int i = 0; i < attacks.Length; i++)
@@ -177,7 +186,6 @@ namespace Entities.WereWolf.AI
         }
         public void DoAttack(AttackType type) 
         {
-            print("Attack Type: " + type);
             switch (type)
             {
                 case AttackType.Fuckoff:
@@ -201,13 +209,43 @@ namespace Entities.WereWolf.AI
             }
         }
 
-        private void Phase2(int damage)
+        private void Phase2(int currentHealth)
         {
             if(Owner.Health.Current <= Owner.Health.Max/2)
             {
                 Owner.Health.OnDamage -= Phase2;
                 Owner.DoCries(true);
                 OnPhaseTwo.Invoke();
+            }
+        }
+
+        private void OnComboDamage()
+        {
+            if(lastComboDamage + comboDamageRate < Time.time)
+                comboDamageCounter = 0;
+
+            lastComboDamage = Time.time;
+
+            comboDamageCounter++;
+
+            if(comboDamageCounter == backwardComboDamageCount && !Owner.IsAttacking && targetDistance < backwardDistance)
+                GoToBackwardWalk();         
+        }
+
+        private void JumpInOutAttackOnDamaged(int health)
+        {
+            if (Owner.Health.CurrentFillAmount <= JumpInOutAttackPlayOnHealthPrecent)
+            {
+                Owner.Health.OnDamage -= JumpInOutAttackOnDamaged;
+                DoAttack(AttackType.JumpInOutAttack);
+            }
+        }
+        private void GiantHeadOnDamaged(int health)
+        {
+            if (Owner.Health.CurrentFillAmount <= giantHeadAttackPlayOnHealthPrecent)
+            {
+                Owner.Health.OnDamage -= GiantHeadOnDamaged;
+                DoAttack(AttackType.GiantHeadAttack);
             }
         }
     }

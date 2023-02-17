@@ -26,6 +26,9 @@ namespace Entities
         protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
         protected virtual bool BusyForNewAction => !AllowMove || IsDamaging || IsAttacking;
         [field: SerializeField] public Health Health { protected set; get; }
+        protected float pushBackHorizontalSpeed;
+        protected bool pushBackHorizontal;
+        protected bool pushBackHorizontalAnimate = true;
 
         protected virtual void Awake()
         {
@@ -36,17 +39,22 @@ namespace Entities
             spr = animator.GetComponent<SpriteRenderer>();
         }
 
-        public virtual void SetHorizontalSpeed(float value,bool notUserInput = false,bool reverseDirection = false)
+        protected virtual void Update()
+        {
+            if (pushBackHorizontal)
+                SetHorizontalSpeed(pushBackHorizontalSpeed, true, true, pushBackHorizontalAnimate);
+        }
+
+        public virtual void SetHorizontalSpeed(float value,bool notUserInput = false,bool reverseDirection = false,bool WalkAnimate = true)
         {
             if (BusyForNewAction && !notUserInput) return;
             cc.SetHorizontal(value);
-
             if (value != 0)
             {
                 SetFaceDirection(value > 0, reverseDirection);
                 FootstepSFXHandling(value, reverseDirection);
             }
-            animator.SetFloat(WALK_ANIMATOR_FLOAT, Mathf.Abs(cc.Velocity.x));
+            animator.SetFloat(WALK_ANIMATOR_FLOAT, WalkAnimate? Mathf.Abs(cc.Velocity.x) : 0);
         }
 
         public virtual void SetFaceDirection(bool right, bool reverseDirection = false)
@@ -64,7 +72,7 @@ namespace Entities
         public virtual void DoPlayAnimation(string name) => animator.Play(name);
         public virtual void DoAddHealth(int value) => ApplyAddHealth(value);
         public virtual bool DoAttack() => !IsAttacking;
-        public virtual void DoDamage(int damage) { Health.ApplyDamage(damage); print(name + " [Damaged]: " + damage); }
+        public virtual void DoDamage(int damage) => Health.ApplyDamage(damage);
         public virtual void DoDeath()
         {
             if (IsDead) return;
@@ -134,7 +142,7 @@ namespace Entities
 
         public virtual void DamageState(bool value,bool changeLayer = true)
         {
-            ResetAllStates();
+            if(value) ResetAllStates();
             IsDamaging = value;
         }
 
@@ -142,10 +150,30 @@ namespace Entities
         {
             IsAttacking = false;
             IsDamaging = false;
+            SetHorizontalSpeed(0);
         }
 
         public virtual void DoDamageOnSky(int damage) { Health.ApplyDamage(damage); print(name + " [Damaged]: " + damage); }
 
         public virtual bool DoAttackByDistance(float distance,int damage) => false;
+
+        #region Push Back
+        public virtual void PushBack() =>
+            pushBackHorizontal = true;
+
+        public virtual void PushBackSettings(float speed, bool walkAnimate = true)
+        {
+            pushBackHorizontalSpeed = speed;
+            pushBackHorizontalAnimate = walkAnimate;
+        }
+        public virtual void PushBackStop()
+        {
+            pushBackHorizontal = false;
+            SetHorizontalSpeed(0);
+        }
+        #endregion
+
+        public void SetOrderLayer(int order) =>
+             spr.sortingOrder = order;
     }
 }

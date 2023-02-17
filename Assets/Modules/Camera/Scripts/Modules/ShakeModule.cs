@@ -24,8 +24,8 @@ namespace Cam
         {
             base.UpdateData();
 
-            if(Input.GetKeyDown(KeyCode.Alpha1))
-                Apply();
+            //if(Input.GetKeyDown(KeyCode.Alpha1))
+            //    Apply();
 
             if (!active) return;
 
