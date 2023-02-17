@@ -43,15 +43,17 @@ namespace CC2D
                 Modules[i].SetOwner(this);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             for (int i = 0; i < Modules.Length; i++)
                 if (Modules[i].IsActive)
                     Modules[i].Process();
+
+            rb.velocity = velocity;
         }
 
-        private void FixedUpdate() =>
-            rb.velocity = velocity;
+        //private void FixedUpdate() =>
+        //    rb.velocity = velocity;
 
         public void SetHorizontal(float value)
         {
@@ -80,5 +82,9 @@ namespace CC2D
             if (!value) rb.velocity = Vector2.zero;
             AllowAction = value;
         }
+
+        public void SetKinematic() => rb.bodyType = RigidbodyType2D.Kinematic;
+        public void SetDynamic() => rb.bodyType = RigidbodyType2D.Dynamic;
+        public void SetTrigger(bool isTrigger) => col.isTrigger = isTrigger;
     }
 }

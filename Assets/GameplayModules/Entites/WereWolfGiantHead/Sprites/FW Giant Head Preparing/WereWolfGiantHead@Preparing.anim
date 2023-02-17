@@ -39,25 +39,25 @@ AnimationClip:
       value: {fileID: 21300000, guid: fb2581d51cc086142854872b4a1bc62d, type: 3}
     - time: 0.75
       value: {fileID: 21300000, guid: 2b3f47d9577b8b747a3c0d59de1bee8a, type: 3}
-    - time: 0.8333333
-      value: {fileID: 21300000, guid: 735b7fedc706cf14abd44577734801a4, type: 3}
-    - time: 0.9166667
-      value: {fileID: 21300000, guid: ce001ee6f9d293344b2626cf09b8173e, type: 3}
-    - time: 1
-      value: {fileID: 21300000, guid: 8cb1a2103fe13f549968882e1d68a7fe, type: 3}
     - time: 1.0833334
-      value: {fileID: 21300000, guid: 2e290d3562ab50f41bc50e4741ae6b15, type: 3}
+      value: {fileID: 21300000, guid: 735b7fedc706cf14abd44577734801a4, type: 3}
     - time: 1.1666666
-      value: {fileID: 21300000, guid: eda1e141adf35b8488059432c23929fe, type: 3}
+      value: {fileID: 21300000, guid: ce001ee6f9d293344b2626cf09b8173e, type: 3}
     - time: 1.25
-      value: {fileID: 21300000, guid: f271eda815f70f946abe96671068f561, type: 3}
+      value: {fileID: 21300000, guid: 8cb1a2103fe13f549968882e1d68a7fe, type: 3}
     - time: 1.3333334
-      value: {fileID: 21300000, guid: dd4c33a228c54e7408ce983106b25420, type: 3}
+      value: {fileID: 21300000, guid: 2e290d3562ab50f41bc50e4741ae6b15, type: 3}
     - time: 1.4166666
-      value: {fileID: 21300000, guid: a80b98e85410987429f0049e40a9ada0, type: 3}
+      value: {fileID: 21300000, guid: eda1e141adf35b8488059432c23929fe, type: 3}
     - time: 1.5
-      value: {fileID: 21300000, guid: 931e9f05b30b70749a4346019efc1833, type: 3}
+      value: {fileID: 21300000, guid: f271eda815f70f946abe96671068f561, type: 3}
     - time: 1.5833334
+      value: {fileID: 21300000, guid: dd4c33a228c54e7408ce983106b25420, type: 3}
+    - time: 1.75
+      value: {fileID: 21300000, guid: a80b98e85410987429f0049e40a9ada0, type: 3}
+    - time: 1.8333334
+      value: {fileID: 21300000, guid: 931e9f05b30b70749a4346019efc1833, type: 3}
+    - time: 1.9166666
       value: {fileID: 21300000, guid: c89254736a2715c4caabb9c2aed8d686, type: 3}
     attribute: m_Sprite
     path: 
@@ -103,7 +103,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.6666666
+    m_StopTime: 2
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -122,4 +122,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: add5c33a5d5fcb74b9e7e010545bb3fa, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

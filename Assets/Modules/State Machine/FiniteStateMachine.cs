@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Patterns
+namespace Patterns.FSMMonoBase
 {
     public class FiniteStateMachine<T>
     {
@@ -46,19 +46,19 @@ namespace Patterns
         public void Update()
         {
             if (currentState != null)
-                currentState.Update();
+                currentState.Updates();
         }
 
         public void LateUpdate()
         {
             if (currentState != null)
-                currentState.LateUpdate();
+                currentState.LateUpdates();
         }
 
         public void FixedUpdate()
         {
             if (currentState != null)
-                currentState.FixedUpdate();
+                currentState.FixedUpdates();
         }
     }
 }

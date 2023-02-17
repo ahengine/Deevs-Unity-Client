@@ -28,9 +28,13 @@ namespace Entities.WereWolf.Moudles
             giantHead.SetOwner(this);
         }
 
+        public bool AllowAttack => controller && !HeadInGround || controller.DoAttack() && Target;
+
+        public Transform Target => controller.Target;
+
         public bool DoAttack()
         {
-            if (HeadInGround || !controller.DoAttack()) return false;
+            if (AllowAttack) return false;
 
             animator.ResetTrigger(HEAD_IN_TRIGGER_ANIMATOR);
             animator.ResetTrigger(HEAD_OUT_TRIGGER_ANIMATOR);
@@ -57,9 +61,9 @@ namespace Entities.WereWolf.Moudles
 
         public void Attack()
         {
-            if (FloatHelper.TargetIsFrontOfSelf(controller.FaceDirection, controller.transform.position.x, giantHead.AttackTarget.position.x) && 
-                FloatHelper.Distance(controller.transform.position.x, giantHead.AttackTarget.position.x) < distanceHoriozntalAttack)
-                giantHead.AttackTarget.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x, damageRange.y));
+            if (FloatHelper.TargetIsFrontOfSelf(controller.FaceDirection, controller.transform.position.x, Target.position.x) && 
+                FloatHelper.Distance(controller.transform.position.x, Target.position.x) < distanceHoriozntalAttack)
+                Target.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x, damageRange.y));
         }
     }
 }

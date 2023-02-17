@@ -33,27 +33,27 @@ AnimationClip:
       value: {fileID: 21300000, guid: a1af7e6d995c97545b2526dd972fa600, type: 3}
     - time: 0.5
       value: {fileID: 21300000, guid: 5c733243fca7276418c54d1bcab650f2, type: 3}
-    - time: 0.5833333
-      value: {fileID: 21300000, guid: 0b920e3bd38f0b14da7a2896eee464a7, type: 3}
     - time: 0.6666667
-      value: {fileID: 21300000, guid: 9a45b65e2ecf3d34b96d3749b3bf6a1b, type: 3}
+      value: {fileID: 21300000, guid: 0b920e3bd38f0b14da7a2896eee464a7, type: 3}
     - time: 0.75
-      value: {fileID: 21300000, guid: c1fb2fcd2a38c894a99642cbe407eee8, type: 3}
-    - time: 0.8333333
-      value: {fileID: 21300000, guid: ce4cd447b288d764ca51fa6baea031e8, type: 3}
+      value: {fileID: 21300000, guid: 9a45b65e2ecf3d34b96d3749b3bf6a1b, type: 3}
     - time: 0.9166667
-      value: {fileID: 21300000, guid: b762b26d875918d48a1ead717903cd57, type: 3}
+      value: {fileID: 21300000, guid: c1fb2fcd2a38c894a99642cbe407eee8, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: 44ea8b2d7aef6d44eb3487aa14093865, type: 3}
+      value: {fileID: 21300000, guid: ce4cd447b288d764ca51fa6baea031e8, type: 3}
     - time: 1.0833334
-      value: {fileID: 21300000, guid: d48cc13dbd861bf4a9ab5a62aac4603f, type: 3}
+      value: {fileID: 21300000, guid: b762b26d875918d48a1ead717903cd57, type: 3}
     - time: 1.1666666
-      value: {fileID: 21300000, guid: c043aa30e3b637b499ffaf27d197b727, type: 3}
-    - time: 1.25
-      value: {fileID: 21300000, guid: d47e3854e56d36849898f23780febe4e, type: 3}
+      value: {fileID: 21300000, guid: 44ea8b2d7aef6d44eb3487aa14093865, type: 3}
     - time: 1.3333334
-      value: {fileID: 21300000, guid: 79799d271ac993849bb8a4122aa6f3da, type: 3}
+      value: {fileID: 21300000, guid: d48cc13dbd861bf4a9ab5a62aac4603f, type: 3}
     - time: 1.4166666
+      value: {fileID: 21300000, guid: c043aa30e3b637b499ffaf27d197b727, type: 3}
+    - time: 1.5
+      value: {fileID: 21300000, guid: d47e3854e56d36849898f23780febe4e, type: 3}
+    - time: 1.5833334
+      value: {fileID: 21300000, guid: 79799d271ac993849bb8a4122aa6f3da, type: 3}
+    - time: 1.6666666
       value: {fileID: 21300000, guid: 31a28d46612a61e49972e368ea1fe069, type: 3}
     attribute: m_Sprite
     path: 
@@ -97,7 +97,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.5
+    m_StopTime: 1.75
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -117,7 +117,28 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.4166666
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 7620d6d101059074e895e15e40c836aa, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: SetAttackVDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 5
+    messageOptions: 0
+  - time: 1.0833334
+    functionName: DoAttackByDistance
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0.3
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.6666666
     functionName: OnAttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -22,7 +22,6 @@ namespace Cam
                 modules[i].Init(this);
         }
 
-
         private void LateUpdate()
         {
             for (int i = 0; i < modules.Length; i++)

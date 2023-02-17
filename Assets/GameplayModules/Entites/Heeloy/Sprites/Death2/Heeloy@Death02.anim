@@ -33,21 +33,21 @@ AnimationClip:
       value: {fileID: 21300000, guid: ce9ff840051d6114e9769a6585ef527a, type: 3}
     - time: 0.5
       value: {fileID: 21300000, guid: e21e808a38e8b944589dcfc23a93065d, type: 3}
-    - time: 0.5833333
-      value: {fileID: 21300000, guid: 20f851ac59d53674e9e61f858ac2281a, type: 3}
     - time: 0.6666667
-      value: {fileID: 21300000, guid: c6d5d4e260241e8418004ee9f53a7e5e, type: 3}
+      value: {fileID: 21300000, guid: 20f851ac59d53674e9e61f858ac2281a, type: 3}
     - time: 0.75
-      value: {fileID: 21300000, guid: 1ec3565d3c97d484d98ebac8b4f2acc5, type: 3}
+      value: {fileID: 21300000, guid: c6d5d4e260241e8418004ee9f53a7e5e, type: 3}
     - time: 0.8333333
-      value: {fileID: 21300000, guid: 500a27fec5331da4f9a2656c33e7be50, type: 3}
+      value: {fileID: 21300000, guid: 1ec3565d3c97d484d98ebac8b4f2acc5, type: 3}
     - time: 0.9166667
-      value: {fileID: 21300000, guid: dc2a400fa8cbad744a155e9962c415f5, type: 3}
+      value: {fileID: 21300000, guid: 500a27fec5331da4f9a2656c33e7be50, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: 956afb6eb095fc74d9c05c2720663ad0, type: 3}
+      value: {fileID: 21300000, guid: dc2a400fa8cbad744a155e9962c415f5, type: 3}
     - time: 1.0833334
-      value: {fileID: 21300000, guid: 032790ab69e934e49b8869af093b379c, type: 3}
+      value: {fileID: 21300000, guid: 956afb6eb095fc74d9c05c2720663ad0, type: 3}
     - time: 1.1666666
+      value: {fileID: 21300000, guid: 032790ab69e934e49b8869af093b379c, type: 3}
+    - time: 1.25
       value: {fileID: 21300000, guid: 8acc2e7e1fc6b0446978fe6d107c12c9, type: 3}
     attribute: m_Sprite
     path: 
@@ -88,7 +88,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.25
+    m_StopTime: 1.3333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -107,4 +107,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 501c9a225e2047b428b9a5368cc7fc9b, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

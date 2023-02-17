@@ -5,44 +5,66 @@ namespace Entities.Heeloy.Moudles
     [RequireComponent(typeof(Heeloy))]
     public class ForlornWereWolfInteraction : MonoBehaviour
     {
-        private const string FORLORN_HIT_DASH_STRIKE_SWORD_ANIMATOR_STATE = "ForlornWereWolf_DashStrikeSword";
-        private const string FORLORN_HIT_SWORD_01_ANIMATOR_STATE = "ForlornWereWolf_HitSword01";
-        private const string FORLORN_HIT_SWORD_02_ANIMATOR_STATE = "ForlornWereWolf_HitSword02";
+        private const string STATE_MACHINE_ANIMATOR = "React WereWolf.";
+        private const string DASH_STRIKE_SWORD_ANIMATOR_STATE = STATE_MACHINE_ANIMATOR + "DashStrikeSword";
+        private const string SWORD_01_ANIMATOR_STATE = STATE_MACHINE_ANIMATOR + "Sword01";
+        private const string SWORD_02_PART1_ANIMATOR_STATE = STATE_MACHINE_ANIMATOR + "Sword02P1";
+        private const string SWORD_02_PART2_ANIMATOR_STATE = STATE_MACHINE_ANIMATOR + "Sword02P2";
+        private const string FUCK_OFF_ANIMATOR_STATE = STATE_MACHINE_ANIMATOR + "Fuckoff";
+        private float pushBackDirection;
 
         private Heeloy heeloy;
-        private bool firstHitSword;
+        [SerializeField] private float fuckOffPushBackSpeed = .3f;
+        [SerializeField] private float dashStrikePushBackSpeed = .6f;
+        [SerializeField] private float strike2Part2PushBackSpeed = .3f;
 
         private void Awake() => heeloy = GetComponent<Heeloy>();
 
-        public void ApplyHitDashStrikeSword()
+        public void ApplyHitFuckOff(bool faceDirection,int damage)
         {
-            heeloy.DoDamage(2);
+            heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
-            heeloy.DoPlayAnimation(FORLORN_HIT_DASH_STRIKE_SWORD_ANIMATOR_STATE);
+
+            heeloy.SetFaceDirection(!faceDirection);
+            pushBackDirection = (faceDirection ? 1 : -1);
+            heeloy.PushBackSpeed(fuckOffPushBackSpeed * pushBackDirection);
+            heeloy.DoPlayAnimation(FUCK_OFF_ANIMATOR_STATE);
+            heeloy.DamageState(true);
         }
 
-        public void ApplyHitSword()
+        public void ApplyHitDashStrikeSword(bool faceDirection, int damage)
         {
-            if (!firstHitSword)
-            {
-                ApplyHitSword01();
-                firstHitSword = true;
-            }
-            else
-                ApplyHitSword02();
+            heeloy.DoDamage(damage);
+            if (heeloy.IsDead) return;
+            pushBackDirection = (faceDirection ? 1 : -1);
+            heeloy.PushBackSpeed(dashStrikePushBackSpeed * pushBackDirection);
+            heeloy.DoPlayAnimation(DASH_STRIKE_SWORD_ANIMATOR_STATE);
+            heeloy.DamageState(true);
         }
 
-        private void ApplyHitSword01()
+        public void ApplyHitStrikeSword01(int damage)
         {
-            heeloy.DoDamage(2);
+            heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
-            heeloy.DoPlayAnimation(FORLORN_HIT_SWORD_01_ANIMATOR_STATE);
+            heeloy.DoPlayAnimation(SWORD_01_ANIMATOR_STATE);
+            heeloy.DamageState(true);
         }
-        private void ApplyHitSword02()
+        public void ApplyHitStrikeSword02Part1(int damage)
         {
-            heeloy.DoDamage(2);
+            heeloy.DoDamage(damage);
             if (heeloy.IsDead) return;
-            heeloy.DoPlayAnimation(FORLORN_HIT_SWORD_02_ANIMATOR_STATE);
+            heeloy.DoPlayAnimation(SWORD_02_PART1_ANIMATOR_STATE);
+            heeloy.DamageState(true);
+        }
+
+        public void ApplyHitStrikeSword02Part2(bool faceDirection, int damage)
+        {
+            heeloy.DoDamage(damage);
+            if (heeloy.IsDead) return;
+            pushBackDirection = (faceDirection ? 1 : -1);
+            heeloy.PushBackSpeed(strike2Part2PushBackSpeed * pushBackDirection);
+            heeloy.DoPlayAnimation(SWORD_02_PART2_ANIMATOR_STATE);
+            heeloy.DamageState(true);
         }
     }
 }

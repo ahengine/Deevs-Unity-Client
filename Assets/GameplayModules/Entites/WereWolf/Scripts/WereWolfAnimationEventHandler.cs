@@ -25,5 +25,29 @@ namespace Entities.WereWolf
 
         public void DeathComplete() =>
             owner.ApplyFinisherDeathEnd();
+
+        public void FuckOffDamage() =>
+            owner.ApplyFuckOffDamage();
+
+        public void DashStrikeDamage() =>
+            owner.ApplyDashStrikeDamage();
+
+        public void Strike01Damage() =>
+            owner.ApplyStrike01Damage();
+        
+        public void Strike02Part1Damage() =>
+            owner.ApplyStrike02Part1Damage();
+
+        public void Strike02Part2Damage() =>
+            owner.ApplyStrike02Part2Damage();
+
+        public void DashStrikeJumpStart() =>
+            owner.DashStriking(true);
+        public void DashStrikeJumpLand() =>
+            owner.DashStriking(false);
+
+        public void DamageEnd() =>
+                owner.DamageState(false);
+
     }
 }

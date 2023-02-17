@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 6258364966232418674}
   - component: {fileID: 6258364966232418673}
   - component: {fileID: 6258364966232418672}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BloodyTear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1.5
+  damageRange: {x: 10, y: 20}
 --- !u!70 &6258364966232418673
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

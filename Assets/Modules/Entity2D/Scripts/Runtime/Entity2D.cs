@@ -20,8 +20,10 @@ namespace Entities
 
         public bool IsDead { protected set; get; }
         public bool IsAttacking { protected set; get; }
-        public bool IsAllowMove { protected set; get; } = true;
+        public bool IsDamaging { protected set; get; }
+        public bool AllowMove { protected set; get; } = true;
         protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
+        protected virtual bool BusyForNewAction => !AllowMove || IsDamaging || IsAttacking;
         [field: SerializeField] public Health Health { protected set; get; }
 
         protected virtual void Awake()
@@ -33,12 +35,25 @@ namespace Entities
             spr = animator.GetComponent<SpriteRenderer>();
         }
 
-        public virtual void SetHorizontalSpeed(float value)
+        public virtual void SetHorizontalSpeed(float value,bool notUserInput = false,bool reverseDirection = false)
         {
-            if (!IsAllowMove) return;
+            if (BusyForNewAction && !notUserInput) return;
             cc.SetHorizontal(value);
-            if (spr) spr.flipX = cc.FaceDirection == -1;
+            FootstepSFXHandling(value, reverseDirection);
+            if(value != 0)
+                SetFaceDirection(value>0,reverseDirection);
             animator.SetFloat(WALK_ANIMATOR_FLOAT, Mathf.Abs(cc.Velocity.x));
+        }
+
+        public virtual void SetFaceDirection(bool right, bool reverseDirection = false)
+        {
+            spr.flipX = !right;
+            if (reverseDirection) spr.flipX = !spr.flipX;
+        }
+
+        protected virtual void FootstepSFXHandling(float value, bool reverseDirection)
+        {
+
         }
 
         // Do
@@ -76,37 +91,53 @@ namespace Entities
                 if (deathAnimationCount > 1) animator.SetInteger(DEATH_INDEX_ANIMATOR_INT, Random.Range(0, deathAnimationCount));
             }
         }
-        protected virtual void ApplyAttack(float distance, int damage, bool many = true)
+
+        protected virtual void Attack(float distance, int damage, bool many = true, bool allowMove = false)
         {
-            IsAttacking = true;
-            animator.SetBool(ATTACK_ANIMATOR_BOOL, true);
             if (many)
                 tr.Ray2DAll<IDamagable>(distance, attackLayer).ForEach(enemy => enemy.DoDamage(damage));
             else
                 tr.Ray2D<IDamagable>(distance, attackLayer)?.DoDamage(damage);
+
+            ApplyAttack(allowMove);
         }
         public virtual void ApplyAttack(bool allowMove = false)
         {
             IsAttacking = true;
-            IsAllowMove = allowMove;
+            SetHorizontalSpeed(0,true);
+            AllowMove = allowMove;
             animator.SetBool(ATTACK_ANIMATOR_BOOL, true);
         }
+
+        public virtual void ApplyAttack() => ApplyAttack(false);
 
         // Events
         public virtual void AttackEnd()
         {
             IsAttacking = false;
-            IsAllowMove = true;
+            AllowMove = true;
             animator.SetBool(ATTACK_ANIMATOR_BOOL, false);
         }
 
         public void SetAllowMove(bool allowMove) =>
-            IsAllowMove = allowMove;
+            AllowMove = allowMove;
 
         public void SetState(bool value)
         {
             SetAllowMove(value);
             cc.SetState(value);
+        }
+
+        public void DamageState(bool value)
+        {
+            ResetAllStates();
+            IsDamaging = value;
+        }
+
+        protected virtual void ResetAllStates()
+        {
+            IsAttacking = false;
+            IsDamaging = false;
         }
     }
 }

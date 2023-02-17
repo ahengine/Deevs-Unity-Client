@@ -23,59 +23,59 @@ AnimationClip:
       value: {fileID: 21300000, guid: ce198502b9df397418b567c1f46c42ab, type: 3}
     - time: 0.083333336
       value: {fileID: 21300000, guid: 508cfe250601ed243b12730f59e55ed5, type: 3}
-    - time: 0.16666667
-      value: {fileID: 21300000, guid: 163ad5dedf84c1a4ebcc809e95ea28e4, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: ec046ba02a56fe1498a94d9dc5554f2a, type: 3}
+      value: {fileID: 21300000, guid: 163ad5dedf84c1a4ebcc809e95ea28e4, type: 3}
     - time: 0.33333334
-      value: {fileID: 21300000, guid: 18f0864d990a7a848bf2d5fb204af0df, type: 3}
+      value: {fileID: 21300000, guid: ec046ba02a56fe1498a94d9dc5554f2a, type: 3}
     - time: 0.41666666
-      value: {fileID: 21300000, guid: 4f352173e2fa8e04b8bc1e91f9df2ec3, type: 3}
+      value: {fileID: 21300000, guid: 18f0864d990a7a848bf2d5fb204af0df, type: 3}
     - time: 0.5
-      value: {fileID: 21300000, guid: ad694c1bc42c3fd45b2c249594e14de9, type: 3}
+      value: {fileID: 21300000, guid: 4f352173e2fa8e04b8bc1e91f9df2ec3, type: 3}
     - time: 0.5833333
-      value: {fileID: 21300000, guid: 3959f0a5365999843a19cb7f7977243d, type: 3}
+      value: {fileID: 21300000, guid: ad694c1bc42c3fd45b2c249594e14de9, type: 3}
     - time: 0.6666667
-      value: {fileID: 21300000, guid: 7d9b6bf6d597f0549a2ef9e19fe3077f, type: 3}
+      value: {fileID: 21300000, guid: 3959f0a5365999843a19cb7f7977243d, type: 3}
     - time: 0.75
-      value: {fileID: 21300000, guid: cb1ddcee83fd02b489f8aa54cef70b5d, type: 3}
-    - time: 0.8333333
-      value: {fileID: 21300000, guid: dfce9a7670a71a94c8220efaef50d77f, type: 3}
+      value: {fileID: 21300000, guid: 7d9b6bf6d597f0549a2ef9e19fe3077f, type: 3}
     - time: 0.9166667
-      value: {fileID: 21300000, guid: 49c939ee15bbc824e8ae83d169cf00b3, type: 3}
-    - time: 1
-      value: {fileID: 21300000, guid: 35c0a96e134799a4b9c6cf872515a9d3, type: 3}
+      value: {fileID: 21300000, guid: cb1ddcee83fd02b489f8aa54cef70b5d, type: 3}
     - time: 1.0833334
-      value: {fileID: 21300000, guid: 5c257cad3efc7e2408d33c9a842e8c03, type: 3}
+      value: {fileID: 21300000, guid: dfce9a7670a71a94c8220efaef50d77f, type: 3}
     - time: 1.1666666
-      value: {fileID: 21300000, guid: 1f3e42934e077d04c9fb370cf48eed8c, type: 3}
+      value: {fileID: 21300000, guid: 49c939ee15bbc824e8ae83d169cf00b3, type: 3}
     - time: 1.25
-      value: {fileID: 21300000, guid: b99d80a5b69aadc438f76c97f108a9b8, type: 3}
+      value: {fileID: 21300000, guid: 35c0a96e134799a4b9c6cf872515a9d3, type: 3}
     - time: 1.3333334
-      value: {fileID: 21300000, guid: 51ef8bae2f076064a8fcfe48eee37ab5, type: 3}
+      value: {fileID: 21300000, guid: 5c257cad3efc7e2408d33c9a842e8c03, type: 3}
     - time: 1.4166666
-      value: {fileID: 21300000, guid: a2b29320ca2c40a4e82f28f540aa883d, type: 3}
+      value: {fileID: 21300000, guid: 1f3e42934e077d04c9fb370cf48eed8c, type: 3}
     - time: 1.5
-      value: {fileID: 21300000, guid: 58634fc3247909144958ad9af064fe1a, type: 3}
-    - time: 1.5833334
-      value: {fileID: 21300000, guid: d1eebd458f2bc3f4da779a782d4956fe, type: 3}
-    - time: 1.6666666
-      value: {fileID: 21300000, guid: dbee37ba600011442a481f9759e1d769, type: 3}
+      value: {fileID: 21300000, guid: b99d80a5b69aadc438f76c97f108a9b8, type: 3}
     - time: 1.75
-      value: {fileID: 21300000, guid: 725eaac4d7e8bca4fa19573ee66f731a, type: 3}
+      value: {fileID: 21300000, guid: 51ef8bae2f076064a8fcfe48eee37ab5, type: 3}
     - time: 1.8333334
-      value: {fileID: 21300000, guid: 1cee4681fcbe34545bd62e21243eb96c, type: 3}
+      value: {fileID: 21300000, guid: a2b29320ca2c40a4e82f28f540aa883d, type: 3}
     - time: 1.9166666
-      value: {fileID: 21300000, guid: a909a38c8355dce46b406f0515425237, type: 3}
+      value: {fileID: 21300000, guid: 58634fc3247909144958ad9af064fe1a, type: 3}
     - time: 2
-      value: {fileID: 21300000, guid: cbe9db49a256acf41ad7241013bd9f35, type: 3}
+      value: {fileID: 21300000, guid: d1eebd458f2bc3f4da779a782d4956fe, type: 3}
     - time: 2.0833333
-      value: {fileID: 21300000, guid: 5300c386c09d2d145ac30f24c62829ea, type: 3}
+      value: {fileID: 21300000, guid: dbee37ba600011442a481f9759e1d769, type: 3}
     - time: 2.1666667
-      value: {fileID: 21300000, guid: 35468ca63ea021141a3ea266a1a15c70, type: 3}
+      value: {fileID: 21300000, guid: 725eaac4d7e8bca4fa19573ee66f731a, type: 3}
     - time: 2.25
-      value: {fileID: 21300000, guid: c0687ee8a9a2c014bab8caa5f1d6eb97, type: 3}
+      value: {fileID: 21300000, guid: 1cee4681fcbe34545bd62e21243eb96c, type: 3}
     - time: 2.3333333
+      value: {fileID: 21300000, guid: a909a38c8355dce46b406f0515425237, type: 3}
+    - time: 2.4166667
+      value: {fileID: 21300000, guid: cbe9db49a256acf41ad7241013bd9f35, type: 3}
+    - time: 2.5
+      value: {fileID: 21300000, guid: 5300c386c09d2d145ac30f24c62829ea, type: 3}
+    - time: 2.6666667
+      value: {fileID: 21300000, guid: 35468ca63ea021141a3ea266a1a15c70, type: 3}
+    - time: 2.75
+      value: {fileID: 21300000, guid: c0687ee8a9a2c014bab8caa5f1d6eb97, type: 3}
+    - time: 2.8333333
       value: {fileID: 21300000, guid: 7b12bbe5e8d2e914dac37658fe45a2cc, type: 3}
     attribute: m_Sprite
     path: 
@@ -130,7 +130,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.4166665
+    m_StopTime: 2.9166665
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -150,7 +150,42 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 2.3333333
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 9c4bd4533fabda546a5ed52a57401380, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.1666666
+    functionName: DashStrikeJumpStart
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.8333334
+    functionName: DashStrikeDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.8333334
+    functionName: DashStrikeDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.4166667
+    functionName: DashStrikeJumpLand
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.8333333
     functionName: AttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}

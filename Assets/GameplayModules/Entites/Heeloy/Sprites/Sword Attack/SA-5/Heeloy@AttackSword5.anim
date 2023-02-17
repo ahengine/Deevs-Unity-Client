@@ -21,11 +21,11 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 958c7a58f7602614ca02b95725e5c138, type: 3}
-    - time: 0.083333336
-      value: {fileID: 21300000, guid: 5186d01918e9da54a8645d6e2dbec412, type: 3}
     - time: 0.16666667
+      value: {fileID: 21300000, guid: 5186d01918e9da54a8645d6e2dbec412, type: 3}
+    - time: 0.33333334
       value: {fileID: 21300000, guid: afdc2126456db224fb10589c3bd629c5, type: 3}
-    - time: 0.25
+    - time: 0.5
       value: {fileID: 21300000, guid: 573eb1f79b3d5cf47ba9aa38827161f0, type: 3}
     attribute: m_Sprite
     path: 
@@ -55,7 +55,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.5833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,7 +75,28 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.25
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: b8604a14aaf471a45a8dcec4b7332ff8, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.083333336
+    functionName: DoAttackByDistance
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 2.4
+    intParameter: 5
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: 
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.5
     functionName: OnAttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}

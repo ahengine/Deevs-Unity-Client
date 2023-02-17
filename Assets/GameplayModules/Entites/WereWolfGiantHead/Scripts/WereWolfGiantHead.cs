@@ -12,8 +12,7 @@ namespace Entities.WereWolf.HeadGiant
 
         private Transform tr;
         private Vector2 position;
-        [SerializeField] private Transform target;
-        [field:SerializeField] public Transform AttackTarget { private set; get; }
+        [SerializeField] private float targetDistance = .4f;
         [SerializeField] private Transform leftTargetPoint;
         [SerializeField] private float attackDistance = 2;
         [SerializeField] private float delayAttack = 2;
@@ -32,51 +31,48 @@ namespace Entities.WereWolf.HeadGiant
             sr = animator.GetComponent<SpriteRenderer>();
         }
 
-        private void Update()
-        {
-            position.x = target.position.x;
-            if(sr.sprite == null)
-                tr.position = position;
-        }
-
         public void SetOwner(WereWolfGiantHeadModule owner) => 
             this.owner = owner;
 
         public void DoAttack()
         {
+            if (owner == null || !owner.AllowAttack)
+                return;
+
+            position.x = owner.Target.position.x + targetDistance;
+            tr.position = position;
+
             animator.SetTrigger(PREPARING_TRIGGER);
-            StartCoroutine(CoroutineHelper.CallAction(ApplyAttack, delayAttack));
+            StartCoroutine(CoroutineHelper.CallActionWithDelay(()=> ApplyAttack(), delayAttack));
         }
 
         private void ApplyAttack()
         {
-            AttackTargetFocused = AttackTarget.position;
+            AttackTargetFocused = owner.Target.position;
             animator.SetTrigger(ATTACK_TRIGGER);
         }
 
         public void Attack()
         {
-            animator.SetTrigger(FloatHelper.Distance(AttackTarget.position.x, AttackTargetFocused.x) < attackDistance ?
+            animator.SetTrigger(FloatHelper.Distance(owner.Target.position.x, AttackTargetFocused.x) < attackDistance ?
                 ATTACK_SUCCESS_TRIGGER : ATTACK_FAILED_TRIGGER);
 
             lastAttackState = false;
         }
 
         public void PickUpTarget() =>
-            AttackTarget.gameObject.SetActive(false);
+            owner.Target.gameObject.SetActive(false);
 
         public void LeftTarget()
         {
-            AttackTarget.position = leftTargetPoint.position;
-            AttackTarget.gameObject.SetActive(true);
-            AttackTarget.GetComponent<IDamagable>().DoDamage(Random.Range(damageRange.x,damageRange.y));
+            owner.Target.position = leftTargetPoint.position;
+            owner.Target.gameObject.SetActive(true);
+            var damagableTarget = owner.Target.GetComponent<IDamagable>();
+            if (damagableTarget != null) damagableTarget.DoDamage(Random.Range(damageRange.x,damageRange.y));
             lastAttackState = true;
             EndAttack();
         }
 
-        public void EndAttack()
-        {
-            owner.EndAttack(lastAttackState);
-        }
+        public void EndAttack() => owner.EndAttack(lastAttackState);
     }
 }

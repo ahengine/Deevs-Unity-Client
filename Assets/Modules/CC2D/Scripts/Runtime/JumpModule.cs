@@ -56,7 +56,10 @@ namespace CC2D.Modules
             }
         }
 
+        public RaycastHit2D IsFalling() => Physics2D.Raycast(cc.Tr.position, Vector2.down, groundCheckDistance * 3, groundLayer);
+
         public RaycastHit2D IsGrounded() => Physics2D.Raycast(cc.Tr.position, Vector2.down, groundCheckDistance, groundLayer);
+
         private void IsGroundedGizmos()
         {
             RaycastHit2D hitInfo = IsGrounded();

@@ -9,9 +9,9 @@ namespace Entities.WereWolf.Moudles
         private const string SEEK_TRIGGER_ANIMATION = "Seek";
         private const string JUMPIN_TRIGGER_ANIMATION = "JumpInAttack";
         private const string JUMPOUT_TRIGGER_ANIMATION = "JumpOutAttack";
-        private const string JUMPOOUT_ATTACK_SUCCESS_BOOL_ANIMATION = "JumpOutAttackSuccess";
+        private const string JUMPOOUT_ATTACK_SUCCESS_TRIGGER_ANIMATION = "JumpOutAttackSuccess";
 
-        private WereWolf controller;
+        private WereWolf owner;
         private Animator animator;
         [SerializeField] private float damagDistance = .3f;
         [SerializeField] private Vector2Int damageRange = new Vector2Int(10,20);
@@ -22,7 +22,7 @@ namespace Entities.WereWolf.Moudles
 
         public void Init(WereWolf controller, Animator animator)
         {
-            this.controller = controller;
+            this.owner = controller;
             this.animator = animator;
         }
 
@@ -30,10 +30,10 @@ namespace Entities.WereWolf.Moudles
 
         private void JumpIn()
         {
-            controller.SetState(false);
-            controller.ApplyAttack();
+            owner.SetState(false);
+            owner.ApplyAttack();
             animator.SetTrigger(JUMPIN_TRIGGER_ANIMATION);
-            controller.StartCoroutine(JumpOutDelay());
+            owner.StartCoroutine(JumpOutDelay());
         }
 
         private IEnumerator JumpOutDelay()
@@ -45,34 +45,41 @@ namespace Entities.WereWolf.Moudles
         }
         public void JumpOut()
         {
-            controller.transform.position = new Vector3(controller.Target.position.x, controller.transform.position.y);
-            controller.CreateGroundDamaged();
+            owner.transform.position = new Vector3(owner.Target.position.x, owner.transform.position.y);
+            owner.CreateGroundDamaged();
             animator.SetTrigger(JUMPOUT_TRIGGER_ANIMATION);
         }
 
         public void Attack()
         {
             bool successAttack =
-                FloatHelper.Distance(controller.Target.position.x, controller.transform.position.x) < damagDistance;
-            animator.SetBool(JUMPOOUT_ATTACK_SUCCESS_BOOL_ANIMATION, successAttack);
+                FloatHelper.Distance(owner.Target.position.x, owner.transform.position.x) < damagDistance;
+
+            if(successAttack)
+                animator.SetTrigger(JUMPOOUT_ATTACK_SUCCESS_TRIGGER_ANIMATION);
+
+            Debug.Log("Jump Out Attack State: " + successAttack);
 
             if (successAttack)
             {
-                controller.Target.GetComponent<IDamagable>().
+                owner.Target.GetComponent<IDamagable>().
                     DoDamage(Random.Range(damageRange.x, damageRange.y));
-                controller.Target.gameObject.SetActive(false);
+                owner.Target.gameObject.SetActive(false);
             }
         }
         public void AttackEnd()
         {
-            controller.AttackEnd();
-            controller.SetState(true);
+            owner.AttackEnd();
+            owner.SetState(true);
 
-            if (!controller.Target.gameObject.activeSelf)
+            if (!owner.Target.gameObject.activeSelf)
             {
-                controller.Target.position = dropTargetPoint.position;
-                controller.Target.gameObject.SetActive(true);
+                owner.Target.position = dropTargetPoint.position;
+                owner.Target.gameObject.SetActive(true);
             }
         }
+
+        public void DamageEnd() =>
+            owner.DamageState(false);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CC2D.Modules
@@ -11,6 +12,8 @@ namespace CC2D.Modules
         protected float startTime;
 
         [SerializeField] protected CC2DModule[] activateDependencies;
+
+        public event Action OnComplete;
 
         public bool AllowActivate()
         {
@@ -47,6 +50,7 @@ namespace CC2D.Modules
         {
             if (!IsActive) return;
 
+            OnComplete.Invoke();
             IsActive = false;
             ApplyDeactivate();
         }

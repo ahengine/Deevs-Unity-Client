@@ -18,7 +18,13 @@ namespace Entities.Heeloy.Inputs
 
         private void Update()
         {
-            heeloy.SetHorizontalSpeed(Input.GetAxis(horizontalMove));
+            if (!heeloy.Dodging && !heeloy.IsAttacking)
+            {
+                if (heeloy.IsSit && Input.GetAxis(horizontalMove) != 0)
+                        heeloy.DoStand();
+
+                heeloy.SetHorizontalSpeed(Input.GetAxis(horizontalMove));
+            }
 
             for (int i = 0; i < jump.Length; i++)
                 if (Input.GetKeyDown(jump[i]))
@@ -29,10 +35,10 @@ namespace Entities.Heeloy.Inputs
                         heeloy.DoJump();
                 }
 
-
-            for (int i = 0; i < sit.Length; i++)
-                if (Input.GetKeyDown(sit[i]))
-                    heeloy.DoSit();
+            if (Input.GetAxis(horizontalMove) == 0)
+                for (int i = 0; i < sit.Length; i++)
+                    if (Input.GetKeyDown(sit[i]))
+                        heeloy.DoSit();
 
             for (int i = 0; i < dodge.Length; i++)
                 if (Input.GetKeyDown(dodge[i]))

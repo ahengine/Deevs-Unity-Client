@@ -21,19 +21,19 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: e187aaae6c97e5748ad6df9182edf0d7, type: 3}
-    - time: 0.083333336
-      value: {fileID: 21300000, guid: 77df6c83e5fb5e3419f5920b04c43233, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 66746c63f52bb6740aed995076741a64, type: 3}
-    - time: 0.25
-      value: {fileID: 21300000, guid: ed2dc40fe16394d4fb4099ae694d9196, type: 3}
+      value: {fileID: 21300000, guid: 77df6c83e5fb5e3419f5920b04c43233, type: 3}
     - time: 0.33333334
-      value: {fileID: 21300000, guid: ca8ecf995ed88dc41992d656ba0d019f, type: 3}
+      value: {fileID: 21300000, guid: 66746c63f52bb6740aed995076741a64, type: 3}
     - time: 0.41666666
-      value: {fileID: 21300000, guid: cf95ea47214a36144aafc1c2d03488b2, type: 3}
+      value: {fileID: 21300000, guid: ed2dc40fe16394d4fb4099ae694d9196, type: 3}
     - time: 0.5
-      value: {fileID: 21300000, guid: 67a4919258b7763409af0a28748002f8, type: 3}
+      value: {fileID: 21300000, guid: ca8ecf995ed88dc41992d656ba0d019f, type: 3}
     - time: 0.5833333
+      value: {fileID: 21300000, guid: cf95ea47214a36144aafc1c2d03488b2, type: 3}
+    - time: 0.75
+      value: {fileID: 21300000, guid: 67a4919258b7763409af0a28748002f8, type: 3}
+    - time: 0.8333333
       value: {fileID: 21300000, guid: b3906e399fb40f54c8e0369be3b5eefb, type: 3}
     attribute: m_Sprite
     path: 
@@ -67,7 +67,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6666666
+    m_StopTime: 0.9166666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -87,7 +87,28 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5833333
+  - time: 0
+    functionName: PlayAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 7aa715693c1756e43830ed55f4ef3fad, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.083333336
+    functionName: SetAttackVDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 3
+    messageOptions: 0
+  - time: 0.5
+    functionName: DoAttackByDistance
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0.23
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8333333
     functionName: OnAttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}

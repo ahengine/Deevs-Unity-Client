@@ -33,6 +33,7 @@ namespace Entities
 
             if (Current <= damage)
             {
+                Debug.Log("DEATH");
                 ApplyDeath();
                 return;
             }

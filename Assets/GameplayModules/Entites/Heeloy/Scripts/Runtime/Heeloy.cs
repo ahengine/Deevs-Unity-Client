@@ -1,11 +1,15 @@
-using UnityEngine;
 using CC2D.Modules;
 using Entities.Heeloy.Moudles;
+using System;
+using UnityEngine;
 
 namespace Entities.Heeloy
 {
     public class Heeloy : Entity2D
     {
+        private const string PLAYER_LAYER = "Player";
+        private const string PLAYER_GHOST_LAYER = "PlayerUncolidedEnemies";
+
         private const string SIT_ANIMATOR_TRIGGER = "Sit";
         private const string STAND_ANIMATOR_TRIGGER = "Stand";
         private const string DODGE_ANIMATOR_TRIGGER = "Dodge";
@@ -13,10 +17,13 @@ namespace Entities.Heeloy
         private const string JUMP_ANIMATOR_TRIGGER = "Jump";
         private const string FALL_ANIMATOR_TRIGGER = "Fall";
         private const string ON_LAND_JUMP_ANIMATOR_TRIGGER = "OnLand";
-        private const string FUCK_OFF_REACT_ANIMATOR_TRIGGER = "FuckoffReact";
+        protected const string DEATH_SKY_ANIMATOR_TRIGGER = "DeathSky";
+        protected const string FALLING_SKY_ANIMATOR_TRIGGER = "FallingSky";
+        private bool fallingSky;
 
         private JumpModule jumpModule;
         private DodgeModule dodgeModule;
+        private Action<IDamagable> doAttackSpecial = null;
 
         public bool Dodging { private set; get; }
         [SerializeField] private SwordAttack swordAttack;
@@ -24,8 +31,15 @@ namespace Entities.Heeloy
         public bool IsSit { private set; get; }
 
         [SerializeField] private Transform camTarget;
-        private Vector2 camPosition;
+        private Vector2 camTargetPosition;
         protected override bool CantAttack => base.CantAttack || Dodging;
+
+        protected override bool BusyForNewAction => base.BusyForNewAction && Dodging;
+
+        [SerializeField] private AudioSource footStepSFX;
+        private float pushBackHorizontalSpeed;
+        private bool pushBackHorizontal;
+        [SerializeField] private Vector2Int landFromSkyDamage = new Vector2Int(5, 8);
 
         protected override void Awake()
         {
@@ -35,32 +49,59 @@ namespace Entities.Heeloy
             jumpModule = cc.GetModule<JumpModule>();
             jumpModule.OnFall += OnFall;
             jumpModule.OnGround += OnGround;
-            camPosition = camTarget.localPosition;
+            camTargetPosition = camTarget.localPosition;
             Health.OnDeath += ApplyDeath;
+
+            dodgeModule.onDodgingEnd += DodgeEnd;
+            dodgeModule.OnComplete += DodgeComplete;
         }
 
         private void Update()
         {
-            if(Dodging && !dodgeModule.IsActive)
-                DodgeEnd();
+            footStepSFX.mute = cc.VelocityY != 0 || Dodging || IsAttacking;
+
+            if (pushBackHorizontal)
+                SetHorizontalSpeed(pushBackHorizontalSpeed, true, true);
         }
 
-        public override void SetHorizontalSpeed(float value)
+        private void OnEnable()
         {
-            base.SetHorizontalSpeed(value);
+            if (jumpModule.IsFalling())
+                FallingInSky();
+        }
+
+        public override void SetHorizontalSpeed(float value, bool notUserInput = false, bool reverseDirection = false)
+        {
+            base.SetHorizontalSpeed(value, notUserInput, reverseDirection);
 
             // Flip Cam
-            camPosition.x = cc.FaceDirection * Mathf.Abs(camPosition.x);
-            camTarget.localPosition = camPosition;
+            camTargetPosition.x = cc.FaceDirection * Mathf.Abs(camTargetPosition.x);
+            camTarget.localPosition = camTargetPosition;
+        }
+
+        protected override void FootstepSFXHandling(float value, bool reverseDirection)
+        {
+            if (value != 0)
+            {
+                if (!footStepSFX.isPlaying) footStepSFX.Play();
+            }
+            else
+                if (footStepSFX.isPlaying) footStepSFX.Pause();
+        }
+
+        protected override void ResetAllStates()
+        {
+            base.ResetAllStates();
+            Dodging = IsSit = false;
         }
 
         #region Do
 
         // Base
+
         public bool DoSit()
         {
             if (dodgeModule.IsActive || cc.Velocity.y != 0) return false;
-
             ApplySit();
             return true;
         }
@@ -73,14 +114,14 @@ namespace Entities.Heeloy
         }
         public bool DoJump()
         {
-            if (!jumpModule.AllowActivate()) return false;
+            if (!jumpModule.AllowActivate() || BusyForNewAction) return false;
 
             ApplyJump();
             return true;
         }
         public bool DoDodge()
         {
-            if (!dodgeModule.AllowActivate()) return false;
+            if (!dodgeModule.AllowActivate() || BusyForNewAction) return false;
             ApplyDodge();
             return true;
         }
@@ -89,16 +130,16 @@ namespace Entities.Heeloy
         public override bool DoAttack() => Dodging ? DoDodgeAttack() : cc.Velocity.y != 0 ? DoJumpAttack() : DoSwordAttack();
         public bool DoDodgeAttack()
         {
-            if (!Dodging) return false;
-            Dodging = false;
-            ApplyAttack(10,5,true);
+            if (!Dodging || IsAttacking) return false;
+            IsAttacking = true;
+            dodgeModule.OnComplete += ApplyAttack;
             return true;
         }
         public bool DoJumpAttack()
         {
             if (Dodging || cc.Velocity.y == 0) return false;
 
-            ApplyAttack(10, 5, true);
+            ApplyAttack();
             return true;
         }
         public bool DoSwordAttack()
@@ -126,18 +167,6 @@ namespace Entities.Heeloy
             ApplySwordHeavyAttack();
             return true;
         }
-        public bool DoFuckOffReact()
-        {
-            if (CantAttack) return false;
-            ApplyFuckoffReact();
-            return true;
-        }
-
-        public bool DoForlornHitDashStrikeSword()
-        {
-            ApplyFuckoffReact();
-            return true;
-        }
 
         // Health
         public override void DoDamage(int damage) { Health.ApplyDamage(damage); print("damage: " + damage); }
@@ -150,26 +179,44 @@ namespace Entities.Heeloy
 
         #region Apply
 
+        private void OnLandFromSky()
+        {
+            int damage = UnityEngine.Random.Range(landFromSkyDamage.x, landFromSkyDamage.y);
+
+            if (Health.Current <= damage)
+                IsDead = true;
+
+            DoDamage(damage);
+
+            if (IsDead)
+                animator.SetTrigger(DEATH_ANIMATOR_TRIGGER);
+
+            jumpModule.OnGround -= OnLandFromSky;
+        }
+
+        public override void ApplyAttack()
+        {
+            base.ApplyAttack();
+
+            if(dodgeModule.IsActive)
+                dodgeModule.OnComplete -= ApplyAttack;
+        }
+
         // Attack
         private void ApplySwordAttack()
         {
             swordAttack.Attack(animator);
-            ApplyAttack(10, 5, true);
+            ApplyAttack();
         }
         private void ApplySwordAbilityAttack()
         {
             swordAttack.SwordAbilityAttack(animator);
-            ApplyAttack(10, 5, true);
+            ApplyAttack();
         }
         private void ApplySwordHeavyAttack()
         {
             swordHeavyAttack.Attack(animator);
-            ApplyAttack(10, 5, true);
-        }
-        private void ApplyFuckoffReact()
-        {
-            animator.SetTrigger(FUCK_OFF_REACT_ANIMATOR_TRIGGER);
-            ApplyAttack(10, 5, true);
+            ApplyAttack();
         }
 
         private void ApplyStand()
@@ -180,6 +227,7 @@ namespace Entities.Heeloy
         private void ApplySit()
         {
             cc.SetAllowAction(false);
+            SetHorizontalSpeed(0, true);
             animator.SetTrigger(SIT_ANIMATOR_TRIGGER);
             IsSit = true;
         }
@@ -191,9 +239,11 @@ namespace Entities.Heeloy
         public void ApplyDodge()
         {
             Dodging = true;
+            gameObject.layer = LayerMask.NameToLayer(PLAYER_GHOST_LAYER);
             dodgeModule.DoActivate();
             animator.SetTrigger(DODGE_ANIMATOR_TRIGGER);
             animator.ResetTrigger(DODGE_END_ANIMATOR_TRIGGER);
+            
         }
         #endregion
 
@@ -201,15 +251,22 @@ namespace Entities.Heeloy
         private void DodgeEnd()
         {
             Dodging = false;
+            gameObject.layer = LayerMask.NameToLayer(PLAYER_LAYER);
             animator.SetTrigger(DODGE_END_ANIMATOR_TRIGGER);
         }
+
+        private void DodgeComplete() =>
+            Dodging = false;
+
         private void OnFall()
         {
             animator.ResetTrigger(ON_LAND_JUMP_ANIMATOR_TRIGGER);
+            if (fallingSky) return;
             animator.SetTrigger(FALL_ANIMATOR_TRIGGER);
         }
         private void OnGround()
         {
+            fallingSky = false;
             animator.SetTrigger(ON_LAND_JUMP_ANIMATOR_TRIGGER);
         }
 
@@ -224,6 +281,75 @@ namespace Entities.Heeloy
             animator.SetTrigger(STAND_ANIMATOR_TRIGGER);
         }
 
+        public void PushBack() =>
+            pushBackHorizontal = true;
+
+        public void PushBackSpeed(float speed) =>
+            pushBackHorizontalSpeed = speed;
+
+        public void PushBackStop() =>
+            pushBackHorizontal = false;
+
         #endregion
+
+        // This Part Just for demo
+        [SerializeField] private Transform target;
+        private int attackValue;
+
+        public void SetAttackDamage(int attackValue) =>
+            this.attackValue = attackValue;
+        public bool DoAttackByDistance(float distance)
+        {
+            if(!target)
+                return false;
+
+            Vector2 pos = tr.position;
+
+            // Change to Ray Attack or register enemies to enemy system
+            if (FloatHelper.InBetween(target.position.x,pos.x,pos.x + (cc.FaceDirection * distance)))
+            {
+                var damagable = target.GetComponent<IDamagable>();
+
+                if (damagable != null)
+                {
+                    damagable.DoDamage(attackValue);
+                    doAttackSpecial?.Invoke(damagable);
+                    return true;
+                }
+            }
+
+             return false;
+        }
+
+        public void DoSwordAbilityAttackByDistance(float distance,int index)
+        {
+            if(DoAttackByDistance(distance))
+            {
+                var attack = target.GetComponent<SwordAbilityInteraction>();
+                if (!attack) return;
+                switch (index)
+                {
+                    case 0:
+                        attack.SwordAbility01();
+                        break;
+
+                    case 1:
+                        attack.SwordAbility02();
+                        break;
+
+                    case 2:
+                        attack.SwordAbility03();
+                        break;
+                }
+            }
+        }
+
+        public void FallingInSky()
+        {
+            if (fallingSky) return;
+            fallingSky = true;
+            animator.SetTrigger(FALLING_SKY_ANIMATOR_TRIGGER);
+            jumpModule.OnGround += OnLandFromSky;
+        }
     }
 }
