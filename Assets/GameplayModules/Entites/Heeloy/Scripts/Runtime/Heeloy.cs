@@ -61,6 +61,8 @@ namespace Entities.Heeloy
         {
             if (fallingSky)
                 FallingInSky();
+
+            SetHorizontalSpeed(0, true);
         }
 
         protected override void Update()
@@ -95,11 +97,7 @@ namespace Entities.Heeloy
         {
             base.ResetAllStates();
             Dodging = false;
-            if (IsSit)
-            {
-                cc.SetAllowAction(true);
-                IsSit = false;
-            }
+            DoUnsit();
         }
 
         private void HillingOnSit()
@@ -120,6 +118,15 @@ namespace Entities.Heeloy
             ApplySit();
             return true;
         }
+
+        private void DoUnsit()
+        {
+            if (!IsSit) return;
+
+            IsSit = false;
+            cc.SetAllowAction(true);
+        }
+
         public bool DoStand()
         {
             if (!IsSit) return false;
@@ -129,7 +136,7 @@ namespace Entities.Heeloy
         }
         public bool DoJump()
         {
-            if (!jumpModule.AllowActivate() || BusyForNewAction) return false;
+            if (!jumpModule.AllowActivate() || BusyForNewAction || !AllowHorizontalInput) return false;
 
             ApplyJump();
             return true;
@@ -195,8 +202,13 @@ namespace Entities.Heeloy
         {
             base.DoDamageOnSky(damage);
             fallingSky = true;
+            DoUnsit();
         }
-
+        public override void DoDamage(int damage)
+        {
+            base.DoDamage(damage);
+            DoUnsit();
+        }
         public override void DoDeath()
         {
 
@@ -288,7 +300,7 @@ namespace Entities.Heeloy
         private void OnFall()
         {
             animator.ResetTrigger(ON_LAND_JUMP_ANIMATOR_TRIGGER);
-            if (fallingSky)
+            if (fallingSky || IsDamaging)
                 return;
             animator.SetTrigger(FALL_ANIMATOR_TRIGGER);
         }
@@ -320,6 +332,7 @@ namespace Entities.Heeloy
 
         public override void DamageState(bool value, bool changeLayer = true)
         {
+            DoUnsit();
             if (IsAttacking)
                 AttackEnd();
             base.DamageState(value, changeLayer);

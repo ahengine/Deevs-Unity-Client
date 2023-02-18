@@ -17,13 +17,13 @@ namespace Entities
         protected Animator animator;
         protected SpriteRenderer spr;
         [SerializeField] protected LayerMask attackLayer;
-        public int FaceDirection => cc.FaceDirection;
+        public virtual int FaceDirection => cc.FaceDirection;
 
         public bool IsDead { protected set; get; }
         public bool IsAttacking { protected set; get; }
         public bool IsDamaging { protected set; get; }
         public bool IsDamagable { protected set; get; } = true;
-        public bool HorizontalInput { protected set; get; } = true;
+        public bool AllowHorizontalInput { protected set; get; } = true;
         public bool AllowMove { protected set; get; } = true;
         protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
         protected virtual bool BusyForNewAction => !AllowMove || IsDamaging || IsAttacking;
@@ -49,7 +49,7 @@ namespace Entities
 
         public virtual void SetHorizontalSpeed(float value,bool notUserInput = false,bool reverseDirection = false,bool WalkAnimate = true)
         {
-            if ((BusyForNewAction || !HorizontalInput) && !notUserInput) return;
+            if ((BusyForNewAction || !AllowHorizontalInput) && !notUserInput || IsDead) return;
             cc.SetHorizontal(value);
             if (value != 0)
                 SetFaceDirection(value > 0, reverseDirection);
@@ -60,6 +60,8 @@ namespace Entities
 
         public virtual void SetFaceDirection(bool right, bool reverseDirection = false)
         {
+            if (IsDead) return;
+
             spr.flipX = !right;
             if (reverseDirection) spr.flipX = !spr.flipX;
         }
@@ -128,7 +130,7 @@ namespace Entities
         public virtual void AttackEnd()
         {
             IsAttacking = false;
-            AllowMove = true;
+            SetState(true);
             animator.SetBool(ATTACK_ANIMATOR_BOOL, false);
         }
 
@@ -179,13 +181,26 @@ namespace Entities
         public void SetOrderLayer(int order) =>
              spr.sortingOrder = order;
 
-        public void SetDamagable(bool value) =>
+        public void SetDamagable(bool value)
+        {
             IsDamagable = value;
 
-        public void SetAllowHorizontalInput(bool value) =>
-            HorizontalInput = value;
+            if(IsDamagable)
+            {
+                if(IsAttacking)
+                    AttackEnd();
+            }
+        }
+
+        private Coroutine AllowHorizontalInputAfterDelayCoroutine;
+        public void SetAllowHorizontalInput(bool value)
+        {
+            AllowHorizontalInput = value;
+            if (AllowHorizontalInputAfterDelayCoroutine != null)
+                StopCoroutine(AllowHorizontalInputAfterDelayCoroutine);
+        }
 
         public void SetAllowHorizontalInputAfterDelay(bool value,float delay) =>
-           StartCoroutine(CoroutineHelper.CallActionWithDelay(() => HorizontalInput = value,delay));
+           AllowHorizontalInputAfterDelayCoroutine = StartCoroutine(CoroutineHelper.CallActionWithDelay(() => AllowHorizontalInput = value,delay));
     }
 }

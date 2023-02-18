@@ -68,9 +68,6 @@ namespace Entities.WereWolf.AI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Y))
-                Owner.DoDamage(10);
-
             targetDistance = Owner.DistanceToTarget;
 
             if (Owner.IsDead)

@@ -19,29 +19,30 @@ public class SwordAbilityInteraction : MonoBehaviour
 
     public void SwordAbility01()
     {
-        if (!entity.IsDamagable) return;
+        if (!entity.IsDamagable || entity.IsDead) return;
         entity.DamageState(true);
         entity.DoPlayAnimation(SWORD_ABILITY_01_STATE);
     }
 
     public void SwordAbility02()
     {
-        if (!entity.IsDamagable) return;
+        if (!entity.IsDamagable || entity.IsDead) return;
         entity.DamageState(true);
         entity.DoPlayAnimation(SWORD_ABILITY_02_STATE);
     }
 
     public void SwordAbility03()
     {
-        if (!entity.IsDamagable) return;
+        if (!entity.IsDamagable || entity.IsDead) return;
         entity.DamageState(true);
         entity.DoPlayAnimation(SWORD_ABILITY_03_STATE);
     }
 
     public void JumpAttack()
     {
-        if (!entity.IsDamagable) return;
+        if (!entity.IsDamagable || entity.IsDead) return;
         entity.DamageState(true);
+        entity.SetState(false);
         entity.DoPlayAnimation(JUMP_ATTACK_STATE);
     }
 }

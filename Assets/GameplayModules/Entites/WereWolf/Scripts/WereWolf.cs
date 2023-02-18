@@ -15,8 +15,8 @@ namespace Entities.WereWolf
 
         [field:SerializeField] public Transform Target { private set; get; }
         public float DistanceToTarget => Vector2.Distance(tr.position, new Vector2(Target.position.x, tr.position.y));
-        public bool TargetFrontOnMe => (!spr.flipX && tr.position.x > Target.position.x) ||
-                                       (spr.flipX && tr.position.x < Target.position.x);
+        public bool TargetFrontOnMe => (FaceDirection == -1 && tr.position.x > Target.position.x) ||
+                                       (FaceDirection == 1 && tr.position.x < Target.position.x);
 
         [field:SerializeField] public WereWolfGiantHeadModule GiantHeadModule { private set; get; }
         [field:SerializeField] public WereWolfJumpOutAttackModule JumpOutAttackModule { private set; get; }
@@ -26,6 +26,7 @@ namespace Entities.WereWolf
         public bool DeathIsCompleted { private set; get; }
         [SerializeField] private Transform finisherDeathDropTargetPoint;
         [SerializeField, Space(2)] private GameObject groundDamagedPrefab;
+        public override int FaceDirection => spr.flipX ? 1 : -1;
         [SerializeField] private float groundDamagedY;
         [SerializeField] private BloodyRain bloodyRain;
         [SerializeField,Range(0,1)] private float backwardWalkSpeedPrecentOfRun = .4f;
@@ -68,10 +69,9 @@ namespace Entities.WereWolf
                 value *= backwardWalkSpeedPrecentOfRun;
             base.SetHorizontalSpeed(value, notUserInput, reverseDirection);
         }
-        public override void SetFaceDirection(bool right, bool reverseDirection = false)
-        {
+        public override void SetFaceDirection(bool right, bool reverseDirection = false) =>
             base.SetFaceDirection(!right, reverseDirection);
-        }
+        
         protected override void FootstepSFXHandling(float value, bool reverseDirection)
         {
             if (!reverseDirection)
@@ -102,7 +102,7 @@ namespace Entities.WereWolf
         // Do
         public override void DoDamage(int damage)
         {
-            if (IsAttacking || IsDead) return;
+            if (IsAttacking || IsDead || !IsDamagable) return;
 
             base.DoDamage(damage);
 
@@ -209,7 +209,7 @@ namespace Entities.WereWolf
             
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
-                reactable.ApplyHitFuckOff(spr.flipX, Random.Range(fuckOffDamage.x, fuckOffDamage.y));
+                reactable.ApplyHitFuckOff(FaceDirection==1, Random.Range(fuckOffDamage.x, fuckOffDamage.y));
         }
         public void ApplyDashStrikeDamage()
         {
@@ -217,7 +217,7 @@ namespace Entities.WereWolf
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
-                reactable.ApplyHitDashStrikeSword(spr.flipX, Random.Range(dashStrikeDamage.x, dashStrikeDamage.y));
+                reactable.ApplyHitDashStrikeSword(FaceDirection==1, Random.Range(dashStrikeDamage.x, dashStrikeDamage.y));
         }
         public void ApplyStrike01Damage()
         {
@@ -243,7 +243,7 @@ namespace Entities.WereWolf
 
             var reactable = Target.GetComponent<ForlornWereWolfInteraction>();
             if (reactable)
-                reactable.ApplyHitStrikeSword02Part2(spr.flipX, Random.Range(strike2Part2Damage.x, strike2Part2Damage.y));
+                reactable.ApplyHitStrikeSword02Part2(FaceDirection == 1, Random.Range(strike2Part2Damage.x, strike2Part2Damage.y));
         }
         public void ApplyAttackDamage(float distance,int damage)
         {

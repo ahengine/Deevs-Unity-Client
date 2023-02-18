@@ -36,7 +36,7 @@ namespace Entities.WereWolf.Moudles
         public bool DoAttack()
         {
             if (!AllowAttack) return false;
-            controller.SetDamagable(true);
+            controller.SetDamagable(false);
             controller.SetState(false);
 
             if(controller.IsAttacking)
@@ -60,8 +60,6 @@ namespace Entities.WereWolf.Moudles
 
         public void EndAttack(bool success)
         {
-            controller.SetDamagable(true);
-            controller.SetState(true);
             animator.SetTrigger(success ? HEAD_OUT_TRIGGER_ANIMATOR : HEAD_OUT_SHUT_TRIGGER_ANIMATOR);
             HeadInGround = false;
         }

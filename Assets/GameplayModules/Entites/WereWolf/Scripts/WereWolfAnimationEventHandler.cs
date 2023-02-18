@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Entities.WereWolf
 {
@@ -46,8 +47,13 @@ namespace Entities.WereWolf
         public void DashStrikeJumpLand() =>
             owner.DashStriking(false);
 
-        public void DamageEnd() =>
-                owner.DamageState(false);
+        public void DamageEnd()
+        {
+            owner.DamageState(false);
+            owner.SetState(true);
+            if (owner.IsAttacking)
+                owner.AttackEnd();
+        }
 
         public void PushBack() =>
             owner.PushBack();

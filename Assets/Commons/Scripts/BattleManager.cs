@@ -17,6 +17,8 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         player.Health.OnAdd += (value,current) => SetPlayerHealth(false);
         player.Health.OnDamage += damage => SetPlayerHealth();
         bossFight.Health.OnDamage += damage => SetBossFightHealth();
