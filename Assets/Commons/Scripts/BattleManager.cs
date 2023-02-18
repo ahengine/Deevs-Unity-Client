@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        player.Health.OnAdd += (value,current) => SetPlayerHealth();
+        player.Health.OnAdd += (value,current) => SetPlayerHealth(false);
         player.Health.OnDamage += damage => SetPlayerHealth();
         bossFight.Health.OnDamage += damage => SetBossFightHealth();
         player.Health.OnDeath += GameOver;
@@ -36,9 +36,9 @@ public class BattleManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private void SetPlayerHealth()
+    private void SetPlayerHealth(bool shake = true)
     {
-        cameraShake.Apply();
+        if(shake) cameraShake.Apply();
         playerHealth.fillAmount = player.Health.CurrentFillAmount;
     }
     private void SetBossFightHealth()

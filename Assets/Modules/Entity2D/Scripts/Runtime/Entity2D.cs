@@ -22,6 +22,8 @@ namespace Entities
         public bool IsDead { protected set; get; }
         public bool IsAttacking { protected set; get; }
         public bool IsDamaging { protected set; get; }
+        public bool IsDamagable { protected set; get; } = true;
+        public bool HorizontalInput { protected set; get; } = true;
         public bool AllowMove { protected set; get; } = true;
         protected virtual bool CantAttack => IsAttacking || cc.Velocity.y != 0;
         protected virtual bool BusyForNewAction => !AllowMove || IsDamaging || IsAttacking;
@@ -47,13 +49,12 @@ namespace Entities
 
         public virtual void SetHorizontalSpeed(float value,bool notUserInput = false,bool reverseDirection = false,bool WalkAnimate = true)
         {
-            if (BusyForNewAction && !notUserInput) return;
+            if ((BusyForNewAction || !HorizontalInput) && !notUserInput) return;
             cc.SetHorizontal(value);
             if (value != 0)
-            {
                 SetFaceDirection(value > 0, reverseDirection);
-                FootstepSFXHandling(value, reverseDirection);
-            }
+
+            FootstepSFXHandling(value, reverseDirection);
             animator.SetFloat(WALK_ANIMATOR_FLOAT, WalkAnimate? Mathf.Abs(cc.Velocity.x) : 0);
         }
 
@@ -144,18 +145,19 @@ namespace Entities
         {
             if(value) ResetAllStates();
             IsDamaging = value;
+            SetHorizontalSpeed(0,true);
         }
 
         protected virtual void ResetAllStates()
         {
             IsAttacking = false;
             IsDamaging = false;
-            SetHorizontalSpeed(0);
+            SetHorizontalSpeed(0, true);
         }
 
         public virtual void DoDamageOnSky(int damage) { Health.ApplyDamage(damage); print(name + " [Damaged]: " + damage); }
 
-        public virtual bool DoAttackByDistance(float distance,int damage) => false;
+        public virtual bool DoAttackByDistance(float distance,int damage,bool faceDirectionBase = true) => false;
 
         #region Push Back
         public virtual void PushBack() =>
@@ -173,7 +175,17 @@ namespace Entities
         }
         #endregion
 
+        public int OrderLayer => spr.sortingOrder;
         public void SetOrderLayer(int order) =>
              spr.sortingOrder = order;
+
+        public void SetDamagable(bool value) =>
+            IsDamagable = value;
+
+        public void SetAllowHorizontalInput(bool value) =>
+            HorizontalInput = value;
+
+        public void SetAllowHorizontalInputAfterDelay(bool value,float delay) =>
+           StartCoroutine(CoroutineHelper.CallActionWithDelay(() => HorizontalInput = value,delay));
     }
 }

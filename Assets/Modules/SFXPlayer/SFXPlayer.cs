@@ -1,8 +1,10 @@
 using UnityEngine;
 
+[RequireComponent (typeof(AudioSource))]
 public class SFXPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
+    private AudioSource audioSource2;
 
     private void Awake()
     {
@@ -10,6 +12,8 @@ public class SFXPlayer : MonoBehaviour
 
         if (!audioSource)
             audioSource = gameObject.AddComponent<AudioSource>();
+
+        audioSource2 = gameObject.AddComponent<AudioSource>();
     }
 
     public void PlayAudioLoop(AudioClip clip)
@@ -26,6 +30,13 @@ public class SFXPlayer : MonoBehaviour
         audioSource.clip = clip;
         audioSource.loop = false;
         audioSource.Play();
+    }
+
+    public void PlayAudioSecond(AudioClip clip)
+    {
+        audioSource2.clip = clip;
+        audioSource2.loop = false;
+        audioSource2.Play();
     }
 
     public void PlayRandomAudio(AudioClip[] clips) =>

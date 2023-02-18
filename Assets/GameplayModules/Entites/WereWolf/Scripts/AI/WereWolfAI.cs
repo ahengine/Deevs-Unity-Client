@@ -47,6 +47,8 @@ namespace Entities.WereWolf.AI
         private float SpeedToTarget =>
             Owner.Target.position.x > transform.position.x ? 1 : -1;
 
+        private IDamagable targetDamagable;
+
         private void Awake()
         {
             Owner = GetComponent<WereWolf>();
@@ -60,7 +62,7 @@ namespace Entities.WereWolf.AI
             Owner.Health.OnDamage += damage => OnComboDamage();
             Owner.Health.OnDeath += ()=> OnDeathWaitForFinisher.Invoke();
             attackLastTime = Time.time;
-
+            targetDamagable = Owner.Target.GetComponent<IDamagable>();
             GoToIdle();
         }
 
@@ -83,12 +85,12 @@ namespace Entities.WereWolf.AI
                 return;
             }
 
-            if (!Owner.IsAttacking && !Owner.IsDamaging)
+            if (!Owner.IsAttacking && !Owner.IsDamaging && !targetDamagable.IsDamaging)
             {
                 if (targetDistance > minDistanceLocomotion)
                     locomotionAction();
                 else
-                    Owner.SetHorizontalSpeed(0);
+                    Owner.SetHorizontalSpeed(0, true);
                 Attack();
             }
             else
@@ -133,7 +135,7 @@ namespace Entities.WereWolf.AI
         }
         private void BackwardWalk()
         {
-            Owner.SetHorizontalSpeed(-SpeedToTarget, true,true);
+            Owner.SetHorizontalSpeed(-SpeedToTarget, false,true);
 
             if (targetDistance > backwardDistance)
                 GoToIdle();

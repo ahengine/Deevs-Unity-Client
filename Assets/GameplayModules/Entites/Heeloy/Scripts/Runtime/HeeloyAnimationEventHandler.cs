@@ -53,5 +53,9 @@ namespace Entities.Heeloy
 
         public void DoAttack(AttackCard handler) =>
             heeloy.DoAttackByDistance(handler.distance, handler.Damage);
+
+        public void DoJumpAttack(AttackCard handler) =>
+            heeloy.DoJumpAttackByDistance(handler.distance, handler.Damage);
+
     }
 }

@@ -7,9 +7,9 @@ namespace Entities.Heeloy.Inputs
     {
         private Heeloy heeloy;
         [SerializeField] private string horizontalMove = "Horizontal";
-        [SerializeField] private KeyCode[] jump = { KeyCode.W,KeyCode.UpArrow };
-        [SerializeField] private KeyCode[] sit = { KeyCode.LeftControl , KeyCode.RightControl };
-        [SerializeField] private KeyCode[] dodge = { KeyCode.LeftShift , KeyCode.RightShift };
+        [SerializeField] private KeyCode[] jump = { KeyCode.W, KeyCode.UpArrow };
+        [SerializeField] private KeyCode[] sit = { KeyCode.LeftControl, KeyCode.RightControl };
+        [SerializeField] private KeyCode[] dodge = { KeyCode.LeftShift, KeyCode.RightShift };
         [SerializeField] private KeyCode swordAttack = KeyCode.Mouse0;
         [SerializeField] private KeyCode swordHeavyAttack = KeyCode.Mouse1;
         [SerializeField] private KeyCode swordAbilityAttack = KeyCode.Q;
@@ -18,6 +18,8 @@ namespace Entities.Heeloy.Inputs
 
         private void Update()
         {
+            if (heeloy.IsDamaging || heeloy.IsDead) return;
+
             if (!heeloy.Dodging && !heeloy.IsAttacking)
             {
                 if (heeloy.IsSit && Input.GetAxis(horizontalMove) != 0)

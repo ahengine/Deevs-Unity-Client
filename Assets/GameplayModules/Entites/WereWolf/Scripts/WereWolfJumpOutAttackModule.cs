@@ -19,6 +19,7 @@ namespace Entities.WereWolf.Moudles
         [SerializeField] private Transform dropTargetPoint;
         [SerializeField] private float seekDelay = 1.2f;
         [SerializeField] private float jumpOutDelay = 1.2f;
+        private int defaultOrder;
 
         public void Init(WereWolf controller, Animator animator)
         {
@@ -30,17 +31,29 @@ namespace Entities.WereWolf.Moudles
 
         private void JumpIn()
         {
+            owner.SetDamagable(false);
             owner.SetState(false);
             owner.ApplyAttack();
             animator.Play(JUMPIN_STATE_ANIMATION);
             owner.StartCoroutine(JumpOutDelay());
+            defaultOrder = owner.OrderLayer;
+            owner.SetOrderLayer(100);
         }
 
         private IEnumerator JumpOutDelay()
         {
             yield return new WaitForSeconds(seekDelay);
             seekingAnimator.SetTrigger(SEEK_TRIGGER_ANIMATION);
-            yield return new WaitForSeconds(jumpOutDelay);
+
+            float timer = 0;
+
+            while(timer < jumpOutDelay)
+            {
+                owner.transform.position = new Vector3(owner.Target.position.x, owner.transform.position.y);
+                timer += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+
             JumpOut();
         }
         public void JumpOut()
@@ -58,8 +71,6 @@ namespace Entities.WereWolf.Moudles
             if(successAttack)
                 animator.SetTrigger(JUMPOOUT_ATTACK_SUCCESS_TRIGGER_ANIMATION);
 
-            Debug.Log("Jump Out Attack State: " + successAttack);
-
             if (successAttack)
             {
                 owner.Target.gameObject.SetActive(false);
@@ -71,15 +82,12 @@ namespace Entities.WereWolf.Moudles
         {
             owner.AttackEnd();
             owner.SetState(true);
-
+            owner.SetOrderLayer(defaultOrder);
             if (!owner.Target.gameObject.activeSelf)
             {
                 owner.Target.position = dropTargetPoint.position;
                 owner.Target.gameObject.SetActive(true);
             }
         }
-
-        public void DamageEnd() =>
-            owner.DamageState(false);
     }
 }

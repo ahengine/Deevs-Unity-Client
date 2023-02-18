@@ -95,7 +95,7 @@ namespace Entities.Heeloy
         {
             base.ResetAllStates();
             Dodging = false;
-            if(IsSit)
+            if (IsSit)
             {
                 cc.SetAllowAction(true);
                 IsSit = false;
@@ -141,7 +141,7 @@ namespace Entities.Heeloy
             if (IsAttacking)
                 AttackEnd();
 
-            if (!dodgeModule.AllowActivate() || BusyForNewAction) return false; 
+            if (!dodgeModule.AllowActivate() || BusyForNewAction) return false;
             ApplyDodge();
             return true;
         }
@@ -199,7 +199,7 @@ namespace Entities.Heeloy
 
         public override void DoDeath()
         {
-            
+
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace Entities.Heeloy
         {
             base.ApplyAttack();
 
-            if(dodgeModule.IsActive)
+            if (dodgeModule.IsActive)
                 dodgeModule.OnComplete -= ApplyAttack;
         }
 
@@ -253,8 +253,8 @@ namespace Entities.Heeloy
         }
         private void ApplySit()
         {
-            cc.SetAllowAction(false);
             SetHorizontalSpeed(0, true);
+            cc.SetAllowAction(false);
             animator.SetTrigger(SIT_ANIMATOR_TRIGGER);
             IsSit = true;
         }
@@ -270,7 +270,7 @@ namespace Entities.Heeloy
             dodgeModule.DoActivate();
             animator.Play(DODGE_ANIMATOR_STATE);
             animator.ResetTrigger(DODGE_END_ANIMATOR_TRIGGER);
-            
+
         }
         #endregion
 
@@ -320,8 +320,9 @@ namespace Entities.Heeloy
 
         public override void DamageState(bool value, bool changeLayer = true)
         {
+            if (IsAttacking)
+                AttackEnd();
             base.DamageState(value, changeLayer);
-
             if (value)
             {
                 if (changeLayer)
@@ -334,9 +335,9 @@ namespace Entities.Heeloy
         // This Part Just for demo
         [SerializeField] private Transform target;
 
-        public override bool DoAttackByDistance(float distance, int damage)
+        public override bool DoAttackByDistance(float distance, int damage,bool faceDirectionBase = true)
         {
-            base.DoAttackByDistance(distance, damage);
+            base.DoAttackByDistance(distance, damage, faceDirectionBase);
 
             if (!target)
                 return false;
@@ -344,7 +345,8 @@ namespace Entities.Heeloy
             Vector2 pos = tr.position;
 
             // Change to Ray Attack or register enemies to enemy system
-            if (FloatHelper.InBetween(target.position.x, pos.x, pos.x + (cc.FaceDirection * distance)))
+            if ((faceDirectionBase && FloatHelper.InBetween(target.position.x, pos.x, pos.x + (cc.FaceDirection * distance))) ||
+                FloatHelper.Distance(target.position.x,pos.x) < distance)
             {
                 var damagable = target.GetComponent<IDamagable>();
 
@@ -358,9 +360,9 @@ namespace Entities.Heeloy
 
             return false;
         }
-        public void DoSwordAbilityAttackByDistance(float distance,int damage,int index)
+        public void DoSwordAbilityAttackByDistance(float distance, int damage, int index)
         {
-            if(DoAttackByDistance(distance,damage))
+            if (DoAttackByDistance(distance, damage))
             {
                 var attack = target.GetComponent<SwordAbilityInteraction>();
                 if (!attack) return;
@@ -378,6 +380,15 @@ namespace Entities.Heeloy
                         attack.SwordAbility03();
                         break;
                 }
+            }
+        }
+
+        public void DoJumpAttackByDistance(float distance, int damage)
+        {
+            if (DoAttackByDistance(distance, damage,false))
+            {
+                var attack = target.GetComponent<SwordAbilityInteraction>();
+                if (attack) attack.JumpAttack();
             }
         }
     }

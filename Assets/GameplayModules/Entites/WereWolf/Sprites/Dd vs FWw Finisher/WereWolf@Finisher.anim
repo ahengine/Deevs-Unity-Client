@@ -487,6 +487,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0
+    functionName: PlayAudioSecond
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: d6f6becc514f83f4fbd2d3316ff8c900, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 11.5
     functionName: DeathComplete
     data: 

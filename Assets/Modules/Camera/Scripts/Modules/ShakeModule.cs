@@ -16,8 +16,8 @@ namespace Cam
         {
             base.Apply();
             active = true;
-            origin = controller.Cam.transform.localPosition;
             startTime = Time.time;
+            origin = controller.Cam.transform.localPosition;
         }
 
         protected override void UpdateData()
