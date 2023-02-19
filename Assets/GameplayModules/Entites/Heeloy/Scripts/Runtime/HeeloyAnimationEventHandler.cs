@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Entities.Heeloy
 {
